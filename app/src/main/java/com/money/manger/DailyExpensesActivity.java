@@ -46,7 +46,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
     }
 
     public void setIntentValues() {
-        toolbarDate.setText(dateString);
+        toolbarDate.setText(uiDateString);
     }
 
 

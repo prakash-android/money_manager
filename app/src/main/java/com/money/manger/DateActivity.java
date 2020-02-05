@@ -115,6 +115,8 @@ public class DateActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
+                toolbarMonth.setText(monthInLetters(selectedDate));
+                toolbarCash.setText("100");
                 dateTextView.setText(dateWithMonthInLetters(selectedDate));
             }
         });

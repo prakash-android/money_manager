@@ -115,7 +115,7 @@ public class DateActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
-                dateTextView.setText(selectedDate);
+                dateTextView.setText(dateWithMonthInLetters(selectedDate));
             }
         });
     }
@@ -123,10 +123,9 @@ public class DateActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn)
     public void nextButton(){
-        dateTextView.setText(selectedDate);
+        dateTextView.setText(dateWithMonthInLetters(selectedDate));
         Intent i = new Intent(this, ExpensesActivity.class);
         i.putExtra("date", "" + selectedDate);
-        Toast.makeText(this,dateWithMonthInLetters(selectedDate), Toast.LENGTH_LONG).show();
         startActivity(i);
     }
 

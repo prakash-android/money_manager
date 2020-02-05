@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ExpensesActivity  extends AppCompatActivity {
+public class DailyExpensesActivity extends AppCompatActivity {
 
-    //show current month stats
+    //show current daily stats (daily view in toolbar)
     @BindView(R.id.toolbarDate)
     TextView toolbarDate;
 
@@ -19,11 +19,12 @@ public class ExpensesActivity  extends AppCompatActivity {
     TextView toolbarCash;
 
     String dateString = "";
+    String uiDateString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expenses);
+        setContentView(R.layout.activity_daily_expenses);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
@@ -39,6 +40,7 @@ public class ExpensesActivity  extends AppCompatActivity {
 
 
     public void getIntentValues(Intent intent){
+        uiDateString = "" + intent.getStringExtra("uidate");
         dateString = "" + intent.getStringExtra("date");
         setIntentValues();
     }

@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ExpensesActivity"
+        <activity android:name=".DailyExpensesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreenWindow.Full.Action"
             android:windowSoftInputMode="adjustResize">

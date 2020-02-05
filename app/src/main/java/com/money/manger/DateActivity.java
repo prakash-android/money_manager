@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +28,7 @@ public class DateActivity extends AppCompatActivity {
     @BindView(R.id.dateTextView)
     TextView dateTextView;
 
-    //show current month stats
+    //show current month stats (month view in toolbar)
     @BindView(R.id.toolbarMonth)
     TextView toolbarMonth;
 
@@ -126,8 +125,9 @@ public class DateActivity extends AppCompatActivity {
     @OnClick(R.id.btn)
     public void nextButton(){
         dateTextView.setText(dateWithMonthInLetters(selectedDate));
-        Intent i = new Intent(this, ExpensesActivity.class);
-        i.putExtra("date", "" + dateWithMonthInLetters(selectedDate));
+        Intent i = new Intent(this, DailyExpensesActivity.class);
+        i.putExtra("uidate", "" + dateWithMonthInLetters(selectedDate));
+        i.putExtra("date", "" + selectedDate);
         startActivity(i);
     }
 
@@ -170,7 +170,7 @@ public class DateActivity extends AppCompatActivity {
                     .make(constraintLayout, "select the date", Snackbar.LENGTH_LONG);
             snackbar.show();
         } else {
-            Intent i = new Intent(this, ExpensesActivity.class);
+            Intent i = new Intent(this, DailyExpensesActivity.class);
             startActivity(i);
         }
     }*/

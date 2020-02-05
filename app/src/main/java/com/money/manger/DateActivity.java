@@ -29,6 +29,12 @@ public class DateActivity extends AppCompatActivity {
     @BindView(R.id.dateTextView)
     TextView dateTextView;
 
+    //show current month stats
+    @BindView(R.id.toolbarMonth)
+    TextView toolbarMonth;
+
+    @BindView(R.id.toolbarCash)
+    TextView toolbarCash;
 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
@@ -62,6 +68,22 @@ public class DateActivity extends AppCompatActivity {
         return formattedDate;
     }
 
+    //date formatter with month in 3 letters
+    public String monthInLetters(String inputString) {
+        String formattedDate = "";
+
+        try {
+            SimpleDateFormat originalFormat =
+                    new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+            SimpleDateFormat targetFormat = new SimpleDateFormat("MMM");
+            Date date = originalFormat.parse(inputString);
+            formattedDate = targetFormat.format(date);
+        } catch (Exception e){
+            Log.e("Exception", "" + e.getMessage());
+        }
+        return formattedDate;
+    }
+
     // get double digits in date
     public String doubleDigitNumber(int Date) {
 
@@ -86,6 +108,8 @@ public class DateActivity extends AppCompatActivity {
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         selectedDate = (doubleDigitNumber(mDay) + "/" + doubleDigitNumber((mMonth + 1)) + "/" + mYear);
 //        dateTextView.setText(date);
+        toolbarMonth.setText(monthInLetters(selectedDate));
+        toolbarCash.setText("100");
 
         calenderView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
             @Override

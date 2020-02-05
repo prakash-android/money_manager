@@ -6,8 +6,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root_layout"
-    android:background="#3F51B5"
+    android:background="#DAD2D2"
     tools:context=".DateActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.MyApp.ActionBar"
+        tools:targetApi="lollipop">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/toolbarMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="2dp"
+                android:text="month"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/notification_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:id="@+id/toolbarCash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="0dp"
+                    android:text="cash"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,7 +78,7 @@
             android:text="Choose The Date"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:textColor="#ffffff"
+            android:textColor="#0C0C0C"
             android:textStyle="bold"/>
 
 <LinearLayout
@@ -48,9 +104,11 @@
             android:layout_marginTop="65dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:textColor="#ffffff"
             android:background="@drawable/bg_btn"
             android:clickable="true"
-            android:text="save my date" />
+            android:focusable="true"
+            android:text="proceed" />
         </RelativeLayout>
 
     </LinearLayout>

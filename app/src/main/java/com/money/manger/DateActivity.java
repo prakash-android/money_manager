@@ -127,7 +127,7 @@ public class DateActivity extends AppCompatActivity {
     public void nextButton(){
         dateTextView.setText(dateWithMonthInLetters(selectedDate));
         Intent i = new Intent(this, ExpensesActivity.class);
-        i.putExtra("date", "" + selectedDate);
+        i.putExtra("date", "" + dateWithMonthInLetters(selectedDate));
         startActivity(i);
     }
 

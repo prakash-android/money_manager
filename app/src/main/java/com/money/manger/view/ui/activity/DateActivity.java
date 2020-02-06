@@ -1,4 +1,4 @@
-package com.money.manger;
+package com.money.manger.view.ui.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.money.manger.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -122,7 +124,7 @@ public class DateActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.btn)
+    @OnClick(R.id.nxt_btn)
     public void nextButton(){
         dateTextView.setText(dateWithMonthInLetters(selectedDate));
         Intent i = new Intent(this, DailyExpensesActivity.class);

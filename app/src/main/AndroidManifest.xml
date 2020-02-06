@@ -11,7 +11,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".DateActivity"
+        <activity android:name=".view.ui.activity.DateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreenWindow.Full.ActionDate"
             android:windowSoftInputMode="adjustResize">
@@ -22,9 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DailyExpensesActivity"
+        <activity android:name=".view.ui.activity.DailyExpensesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreenWindow.Full.Action"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
+        <activity android:name=".view.ui.activity.NewExpensesActivity"
+            android:screenOrientation="portrait"
+            android:label="add new expenses"
             android:windowSoftInputMode="adjustResize">
 
         </activity>

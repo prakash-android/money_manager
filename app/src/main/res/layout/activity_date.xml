@@ -96,21 +96,22 @@
         </LinearLayout>
 
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/bg_btn"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="proceed"
-            android:textColor="#ffffff" />
+
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_btn"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="proceed"
+        android:textStyle="bold"
+        android:textColor="#ffffff" />
 
 
 </RelativeLayout>

@@ -67,14 +67,14 @@ public class DateActivity extends AppCompatActivity {
         return formattedDate;
     }
 
-    //date formatter with month in 3 letters
+    //date formatter with month (MMM - 3 letters)
     public String monthInLetters(String inputString) {
         String formattedDate = "";
 
         try {
             SimpleDateFormat originalFormat =
                     new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-            SimpleDateFormat targetFormat = new SimpleDateFormat("MMM");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("MMMM");
             Date date = originalFormat.parse(inputString);
             formattedDate = targetFormat.format(date);
         } catch (Exception e){
@@ -108,14 +108,14 @@ public class DateActivity extends AppCompatActivity {
         selectedDate = (doubleDigitNumber(mDay) + "/" + doubleDigitNumber((mMonth + 1)) + "/" + mYear);
 //        dateTextView.setText(date);
         toolbarMonth.setText(monthInLetters(selectedDate));
-        toolbarCash.setText("8000");
+        toolbarCash.setText("0");
 
         calenderView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
                 toolbarMonth.setText(monthInLetters(selectedDate));
-                toolbarCash.setText("8000");
+                toolbarCash.setText("0");
                 dateTextView.setText(dateWithMonthInLetters(selectedDate));
             }
         });

@@ -108,14 +108,14 @@ public class DateActivity extends AppCompatActivity {
         selectedDate = (doubleDigitNumber(mDay) + "/" + doubleDigitNumber((mMonth + 1)) + "/" + mYear);
 //        dateTextView.setText(date);
         toolbarMonth.setText(monthInLetters(selectedDate));
-        toolbarCash.setText("100");
+        toolbarCash.setText("8000");
 
         calenderView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
                 toolbarMonth.setText(monthInLetters(selectedDate));
-                toolbarCash.setText("100");
+                toolbarCash.setText("8000");
                 dateTextView.setText(dateWithMonthInLetters(selectedDate));
             }
         });

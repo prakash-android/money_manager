@@ -34,7 +34,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
 
     public void setListeners(){
-        toolbarCash.setText("1290");
+        toolbarCash.setText("95");
 
     }
 

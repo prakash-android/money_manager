@@ -30,7 +30,7 @@
                 android:text="month"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <RelativeLayout
@@ -54,7 +54,7 @@
                     android:text="cash"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
 
@@ -78,12 +78,12 @@
             android:gravity="center"
             android:text="Choose The Date"
             android:textColor="#0C0C0C"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/calenderLayout"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="48dp"

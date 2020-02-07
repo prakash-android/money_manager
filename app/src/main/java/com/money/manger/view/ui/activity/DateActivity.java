@@ -12,20 +12,22 @@ import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.money.manger.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
-
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 public class DateActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class DateActivity extends AppCompatActivity {
     MenuItem amtMenu;
 
     @BindView(R.id.calendarView)
-    CalendarView calenderView;
+    MaterialCalendarView calenderView;
 
     @BindView(R.id.dateTextView)
     TextView dateTextView;
@@ -44,6 +46,8 @@ public class DateActivity extends AppCompatActivity {
     RelativeLayout rootLayout;
 
     String selectedDate = "";
+
+//    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,114 @@ public class DateActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * initial date format - yyyy-MM-dd
+     * return month in full string
+     * getdate() - to get date at the beginning
+     */
+    public String formatMonth(String inputString) {
+        String formattedDate = "";
+
+        try {
+            SimpleDateFormat originalFormat =
+                    new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("MMMM");
+            Date date = originalFormat.parse(inputString);
+            formattedDate = targetFormat.format(date);
+        } catch (Exception e){
+            Log.e("Exception", "" + e.getMessage());
+        }
+        return formattedDate;
+    }
+
+    public String formatDate(String inputString) {
+        String formattedDate = "";
+
+        try {
+            SimpleDateFormat originalFormat =
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd MMM yyyy");
+            Date date = originalFormat.parse(inputString);
+            formattedDate = targetFormat.format(date);
+        } catch (Exception e){
+            Log.e("Exception", "" + e.getMessage());
+        }
+        return formattedDate;
+    }
+
+
+    // get double digits in date
+    public String doubleDigitNumber(int Date) {
+
+        String initialNumber = "";
+
+        if (Date < 10) {
+            initialNumber = "0" + Date;
+        } else {
+            initialNumber = "" + Date;
+        }
+
+        return initialNumber;
+    }
+
+
+
+    public void setupListeners(){
+        // Get Current Date as default
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        selectedDate = ( mYear + "-" + doubleDigitNumber((mMonth + 1)) + "-" + doubleDigitNumber(mDay));
+        toolbar.setTitle(formatMonth(selectedDate));
+
+
+        calenderView.setOnDateChangedListener(
+                new OnDateSelectedListener() {
+                    @Override
+                    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                        final String text = String.valueOf(date.getDate());
+                        selectedDate = formatDate(text);
+                        dateTextView.setText(selectedDate);
+                    }
+                });
+
+
+        // month change listener
+        calenderView.setOnMonthChangedListener( new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                final String text = String.valueOf(date.getDate());
+                toolbar.setTitle(formatMonth(text));
+            }
+        });
+    }
+
+
+    @OnClick(R.id.nxt_btn)
+    public void nextButton(){
+       // Log.e("mm", selectedDate + " " + formatDate(selectedDate));
+        dateTextView.setText(formatDate(selectedDate));
+        Intent i = new Intent(this, DailyExpensesActivity.class);
+        i.putExtra("uidate", "" + dateTextView.getText().toString());
+        i.putExtra("date", "" + selectedDate);
+        startActivity(i);
+    }
+
+
+
+
+
+}
+
+
+
+/*
+
+//        // cropping out of {} brackets in string
+//        int start = inputString.indexOf("{") + 1;
+//        int end = inputString.indexOf("}");
+//        String result = inputString.substring(start, end);
 
     //date formatter with month in 3 letters
     public String dateWithMonthInLetters(String inputString) {
@@ -110,74 +222,8 @@ public class DateActivity extends AppCompatActivity {
         return formattedDate;
     }
 
-    // get double digits in date
-    public String doubleDigitNumber(int Date) {
-
-        String initialNumber = "";
-
-        if (Date < 10) {
-            initialNumber = "0" + Date;
-        } else {
-            initialNumber = "" + Date;
-        }
-
-        return initialNumber;
-    }
 
 
-
-    public void setupListeners(){
-        // Get Current Date as default
-        final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
-        selectedDate = (doubleDigitNumber(mDay) + "/" + doubleDigitNumber((mMonth + 1)) + "/" + mYear);
-//        dateTextView.setText(date);
-        toolbar.setTitle(monthInLetters(selectedDate));
-       // toolbarCash.setText("0");
-
-        calenderView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
-                toolbar.setTitle(monthInLetters(selectedDate));
-                toolbar.setTitle(monthInLetters(selectedDate));
-              //  toolbarCash.setText("0");
-                dateTextView.setText(dateWithMonthInLetters(selectedDate));
-            }
-        });
-
-
-//        MaterialCalendarView calendarView = new MaterialCalendarView(this);
-//        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
-//            @Override
-//            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-//                //Do something like this
-//            //    Date date1 = date.getDate();
-//            }
-//        });
-    }
-
-
-    @OnClick(R.id.nxt_btn)
-    public void nextButton(){
-        dateTextView.setText(dateWithMonthInLetters(selectedDate));
-        Intent i = new Intent(this, DailyExpensesActivity.class);
-        i.putExtra("uidate", "" + dateWithMonthInLetters(selectedDate));
-        i.putExtra("date", "" + selectedDate);
-        startActivity(i);
-    }
-
-
-
-
-
-}
-
-
-
-/*
     @OnClick(R.id.setDate)
     public void selectDate(){
          myCalendar = Calendar.getInstance();

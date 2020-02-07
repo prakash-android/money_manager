@@ -11,8 +11,6 @@ import butterknife.ButterKnife;
 
 public class NewExpensesActivity extends AppCompatActivity {
 
-//    @BindView(R.id.new_toolbar)
-//    Toolbar newToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +20,6 @@ public class NewExpensesActivity extends AppCompatActivity {
 
 
         // add back arrow to toolbar
-//        setSupportActionBar(newToolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);

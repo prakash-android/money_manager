@@ -8,61 +8,69 @@
     android:background="#F3F3F3"
     tools:context=".view.ui.activity.DateActivity">
 
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="@android:color/white"-->
+<!--        android:elevation="4dp"-->
+<!--        android:theme="@style/ThemeOverlay.MyApp.ActionBar"-->
+<!--        tools:targetApi="lollipop">-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/toolbarMonth"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:layout_marginStart="2dp"-->
+<!--                android:text="month"-->
+<!--                android:textAllCaps="true"-->
+<!--                android:textColor="@color/colorPrimary"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/notification_layout"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:foreground="?attr/selectableItemBackground"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingEnd="16dp">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/toolbarCash"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginEnd="0dp"-->
+<!--                    android:text="cash"-->
+<!--                    android:textAllCaps="true"-->
+<!--                    android:textColor="@color/colorPrimary"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold" />-->
+
+
+<!--            </RelativeLayout>-->
+
+<!--        </RelativeLayout>-->
+
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.MyApp.ActionBar"
-        tools:targetApi="lollipop">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/toolbarMonth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="2dp"
-                android:text="month"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <RelativeLayout
-                android:id="@+id/notification_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingStart="8dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:id="@+id/toolbarCash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="0dp"
-                    android:text="cash"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-    </androidx.appcompat.widget.Toolbar>
+        android:background="@color/colorPrimary"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

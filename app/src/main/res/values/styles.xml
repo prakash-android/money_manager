@@ -50,11 +50,20 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="ThemeOverlay.MyApp.ActionBarNew" parent="ThemeOverlay.AppCompat.ActionBar">
-        <!-- Parent theme sets colorControlNormal to textColorPrimary. -->
-        <item name="android:textColorPrimary">@color/colorPrimary</item>
-        <item name="android:textColorHint">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="FullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:typeface">serif</item>
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <!--
+                <item name="android:windowTranslucentStatus">true</item>
+                <item name="android:windowTranslucentNavigation">true</item>-->
     </style>
+
+
 
 </resources>

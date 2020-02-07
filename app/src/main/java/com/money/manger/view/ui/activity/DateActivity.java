@@ -2,15 +2,21 @@ package com.money.manger.view.ui.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.money.manger.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,19 +29,16 @@ import butterknife.OnClick;
 
 public class DateActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    MenuItem amtMenu;
 
     @BindView(R.id.calendarView)
     CalendarView calenderView;
 
     @BindView(R.id.dateTextView)
     TextView dateTextView;
-
-    //show current month stats (month view in toolbar)
-    @BindView(R.id.toolbarMonth)
-    TextView toolbarMonth;
-
-    @BindView(R.id.toolbarCash)
-    TextView toolbarCash;
 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
@@ -48,7 +51,29 @@ public class DateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_date);
         ButterKnife.bind(this);
 
+        setToolbar();
         setupListeners();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.monthly_toolbar_menu, menu);
+        amtMenu = menu.findItem(R.id.mmamt_item);
+        amtMenu.setTitle("dummy");
+        return true;
+    }
+
+    private void setToolbar() {
+        toolbar.setTitle("title here");
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        amtMenu.setTitle("100");
+        return true;
     }
 
 
@@ -109,18 +134,29 @@ public class DateActivity extends AppCompatActivity {
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         selectedDate = (doubleDigitNumber(mDay) + "/" + doubleDigitNumber((mMonth + 1)) + "/" + mYear);
 //        dateTextView.setText(date);
-        toolbarMonth.setText(monthInLetters(selectedDate));
-        toolbarCash.setText("0");
+        toolbar.setTitle(monthInLetters(selectedDate));
+       // toolbarCash.setText("0");
 
         calenderView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 selectedDate = (doubleDigitNumber(dayOfMonth) + "/" + doubleDigitNumber((month + 1)) + "/" + year);
-                toolbarMonth.setText(monthInLetters(selectedDate));
-                toolbarCash.setText("0");
+                toolbar.setTitle(monthInLetters(selectedDate));
+                toolbar.setTitle(monthInLetters(selectedDate));
+              //  toolbarCash.setText("0");
                 dateTextView.setText(dateWithMonthInLetters(selectedDate));
             }
         });
+
+
+//        MaterialCalendarView calendarView = new MaterialCalendarView(this);
+//        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+//            @Override
+//            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+//                //Do something like this
+//            //    Date date1 = date.getDate();
+//            }
+//        });
     }
 
 

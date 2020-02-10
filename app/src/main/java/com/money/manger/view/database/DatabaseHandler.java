@@ -1,6 +1,8 @@
 package com.money.manger.view.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -9,35 +11,35 @@ import static android.content.ContentValues.TAG;
 
 public class DatabaseHandler {
 
-       private static final String TAG = "DictionaryDatabase";
+       private static final String TAG = "ExpensesDatabase";
 
     //The columns we'll include in the EXPENSES table
     public static final String COL_NAME = "ITEMNAME";
     public static final String COL_AMOUNT = "AMOUNT";
 
-    private static final String DATABASE_NAME = "EXPENSES";
-    private static final String FTS_VIRTUAL_TABLE = "FTS";
-    private static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "EXPENSES";
+    public static final String FTS_VIRTUAL_TABLE = "FTS";
+    public static final int DATABASE_VERSION = 1;
 
-    private final DatabaseOpenHelper databaseOpenHelper;
+    public final DatabaseOpenHelper databaseOpenHelper;
 
     public DatabaseHandler(Context context) {
         databaseOpenHelper = new DatabaseOpenHelper(context);
     }
 
 
-    private static class DatabaseOpenHelper extends SQLiteOpenHelper {
+    public static class DatabaseOpenHelper extends SQLiteOpenHelper {
 
-        private final Context helperContext;
-        private SQLiteDatabase mDatabase;
+        public Context helperContext;
+        public SQLiteDatabase mDatabase;
 
-        private static final String FTS_TABLE_CREATE =
+        public static final String FTS_TABLE_CREATE =
                 "CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE +
                         " USING fts3 (" +
                         COL_NAME + ", " +
                         COL_AMOUNT + ")";
 
-        DatabaseOpenHelper(Context context) {
+        public DatabaseOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
             helperContext = context;
         }
@@ -55,6 +57,23 @@ public class DatabaseHandler {
             db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
             onCreate(db);
         }
+
+        public long addRow(String word, String definition) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(COL_NAME, word);
+            initialValues.put(COL_AMOUNT, definition);
+
+            return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
+        }
+
+        public long getRowCount() {
+            SQLiteDatabase db = this.getReadableDatabase();
+            long count = DatabaseUtils.queryNumEntries(db, FTS_VIRTUAL_TABLE);
+            db.close();
+            return count;
+        }
+
+
     }
 
     public void action(){

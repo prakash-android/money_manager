@@ -2,7 +2,10 @@ package com.money.manger.view.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,13 +37,10 @@ public class NewExpensesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-//        DatabaseHandler databaseHandler = new DatabaseHandler();
-//        databaseHandler.action();
     }
 
 
-    @OnClick(R.id.add_btn)
+    @OnClick(R.id.add_button)
     public void addButton(){
 
     }

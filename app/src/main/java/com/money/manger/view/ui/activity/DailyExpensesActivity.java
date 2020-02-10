@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +40,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
     String dateString = "";
     String uiDateString = "";
+    Double dailyTotal = 0.0;
     SQLiteDatabase sqLiteDatabaseObj;
     private ArrayList<String> date = new ArrayList<String>();
     private ArrayList<String> itemName = new ArrayList<String>();
@@ -84,7 +87,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        amtMenu.setTitle("0");
+        amtMenu.setTitle(dailyTotal.toString());
         return true;
     }
 
@@ -112,17 +115,26 @@ public class DailyExpensesActivity extends AppCompatActivity {
         Amount.clear();
         itemName.clear();
         myListData.clear();
+        dailyTotal = 0.0;
         String t1, t2;
         if (cursor.moveToFirst()) {
             do {
                 t1 = cursor.getString(cursor.getColumnIndex("item_name"));
                 t2 = cursor.getString(cursor.getColumnIndex("amount"));
                 myListData.add(new MyListData(t1,t2));
+                dailyTotal += Double.valueOf(t2);
                 itemName.add(cursor.getString(cursor.getColumnIndex("item_name")));
                 Amount.add(cursor.getString(cursor.getColumnIndex("amount")));
             } while (cursor.moveToNext());
         }
         cursor.close();
+        updateDailyTotal();
+    }
+
+
+    public void updateDailyTotal(){
+        invalidateOptionsMenu();
+        ///Toast.makeText(this,"daily total: "+ dailyTotal.toString(),Toast.LENGTH_SHORT).show();
     }
 
 

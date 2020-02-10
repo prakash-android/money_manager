@@ -17,6 +17,9 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.threeten.bp.LocalDate;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -140,13 +143,16 @@ public class Monthly_DateSelection_Activity extends AppCompatActivity {
         toolbar.setTitle(formatMonth(selectedDate));
 
 
+        calenderView.setSelectedDate(LocalDate.parse(selectedDate));
+        calenderView.setSelected(true);
         calenderView.setOnDateChangedListener(
                 new OnDateSelectedListener() {
                     @Override
                     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                         final String text = String.valueOf(date.getDate());
-                        selectedDate = formatDate(text);
-                        dateTextView.setText(selectedDate);
+                        selectedDate = text;
+                        String tempDate = formatDate(text);
+                        dateTextView.setText(tempDate);
                     }
                 });
 
@@ -167,15 +173,17 @@ public class Monthly_DateSelection_Activity extends AppCompatActivity {
        // Log.e("mm", selectedDate + " " + formatDate(selectedDate));
         dateTextView.setText(formatDate(selectedDate));
         Intent i = new Intent(this, DailyExpensesActivity.class);
-        i.putExtra("uidate", "" + dateTextView.getText().toString());
+        i.putExtra("uidate", "" + formatDate(selectedDate));
         i.putExtra("date", "" + selectedDate);
         startActivity(i);
     }
 
 
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // dateTextView.setText(formatDate(selectedDate));
+    }
 }
 
 

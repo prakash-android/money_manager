@@ -2,67 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F3F3"
     tools:context=".view.ui.activity.DailyExpensesActivity">
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="@android:color/white"-->
-<!--        android:elevation="4dp"-->
-<!--        android:theme="@style/ThemeOverlay.MyApp.ActionBarNew"-->
-<!--        tools:targetApi="lollipop">-->
-
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/toolbarDate"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_marginStart="2dp"-->
-<!--                android:text="date"-->
-<!--                android:textAllCaps="true"-->
-<!--                android:textColor="@color/colorPrimary"-->
-<!--                android:textSize="20sp"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <RelativeLayout-->
-<!--                android:id="@+id/notification_layout"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:foreground="?attr/selectableItemBackground"-->
-<!--                android:paddingStart="8dp"-->
-<!--                android:paddingEnd="16dp">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/toolbarCash"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:layout_marginEnd="0dp"-->
-<!--                    android:text="cash"-->
-<!--                    android:textAllCaps="true"-->
-<!--                    android:textColor="@color/colorPrimary"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold" />-->
-
-
-<!--            </RelativeLayout>-->
-
-<!--        </RelativeLayout>-->
-
-<!--    </androidx.appcompat.widget.Toolbar>-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -71,6 +14,36 @@
         android:background="@color/colorPrimary"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/root_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:visibility="visible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="96dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+            </RelativeLayout>
+
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 

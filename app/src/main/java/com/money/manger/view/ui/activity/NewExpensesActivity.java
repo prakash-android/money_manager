@@ -86,7 +86,7 @@ public class NewExpensesActivity extends AppCompatActivity {
         if(EditTextEmptyHold == true)
         {
 
-            SQLiteDataBaseQueryHolder = "INSERT INTO Expenses (item_name,amount) VALUES('"+NameHolder+"', '"+NumberHolder+"', '"+dateString+"');";
+            SQLiteDataBaseQueryHolder = "INSERT INTO Expenses (item_name,amount,date) VALUES('"+NameHolder+"', '"+NumberHolder+"', '"+dateString+"');";
 
             sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
 

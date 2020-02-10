@@ -77,6 +77,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
     @OnClick(R.id.add_btn)
     public void addButton() {
         Intent i = new Intent(this, NewExpensesActivity.class);
+        i.putExtra("date", uiDateString);
         startActivity(i);
         overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
     }

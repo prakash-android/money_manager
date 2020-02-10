@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import static android.content.ContentValues.TAG;
 
+//        DatabaseHandler db = new DatabaseHandler(this);
+//        db.databaseOpenHelper.addRow("cool","23");
+//        long var =  db.databaseOpenHelper.getRowCount();
+//        Toast.makeText(this, (int) var, Toast.LENGTH_SHORT).show();
 
 public class DatabaseHandler {
 

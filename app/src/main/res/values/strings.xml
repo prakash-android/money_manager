@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">moneyManager</string>
+    <string name="rupee">RS.</string>
+    <string name="rupeeSymbol">"\u20B9"</string>
 </resources>

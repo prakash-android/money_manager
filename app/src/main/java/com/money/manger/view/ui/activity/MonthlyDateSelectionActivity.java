@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class Monthly_DateSelection_Activity extends AppCompatActivity {
+public class MonthlyDateSelectionActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

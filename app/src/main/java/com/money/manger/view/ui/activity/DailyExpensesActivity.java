@@ -42,7 +42,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
     String dateString = "";
     String uiDateString = "";
-    Double dailyTotal = 0.0;
+    int dailyTotal = 0;
 
     DbHelper dbhelper;
     ArrayList<MyListData> myListData = new ArrayList<MyListData>();
@@ -89,7 +89,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        amtMenu.setTitle(dailyTotal.toString());
+        amtMenu.setTitle(String.valueOf(dailyTotal));
         return true;
     }
 
@@ -113,7 +113,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
         //reset defaults
         myListData.clear();
-        dailyTotal = 0.0;
+        dailyTotal = 0;
 
         //get values n calculate dailytotal
         myListData .addAll( dbhelper.getAllCashHistory(dateString));
@@ -122,7 +122,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
         for(MyListData item : myListData) {
 
             t1 = item.getAmt();
-            dailyTotal += Double.valueOf(t1);
+            dailyTotal += Integer.parseInt(t1);
         }
 
         updateDailyTotal();

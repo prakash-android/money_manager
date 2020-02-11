@@ -86,18 +86,24 @@ public class NewExpensesActivity extends AppCompatActivity {
     }
 
     public void addNewRow(){
-        dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
-        Log.e("mm", "data inserted");
-        EmptyEditTextAfterDataInsert();
+        boolean queryResult = false;
+        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+
+        if(queryResult) {
+            Toast.makeText(this, "data inserted successfully",Toast.LENGTH_LONG).show();
+            onBackPressed();
+        } else {
+            Toast.makeText(this, "error occured",Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void EmptyEditTextAfterDataInsert(){
+/*    public void EmptyEditTextAfterDataInsert(){
 
         nameEditText.getText().clear();
 
         amtEditText.getText().clear();
 
-    }
+    }*/
 
 
 

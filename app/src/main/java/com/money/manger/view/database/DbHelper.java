@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -49,13 +50,23 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     public boolean addCashHistory (String name, String amt, String date) {
+        boolean s;
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM_NAME , name);
         contentValues.put(COLUMN_AMOUNT , amt);
         contentValues.put(COLUMN_DATE , date);
-        db.insert(MONEY_TABLE , null, contentValues);
-        return true;
+
+        // insert row
+        long success = db.insert(MONEY_TABLE , null, contentValues);
+        s = success != -1L;
+
+        //close db connection
+        db.close();
+
+        Log.e("addCashHistory", "" + s);
+        return s;
     }
 
     public ArrayList<MyListData> getAllCashHistory(String sDate){
@@ -63,24 +74,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( selectQuery , null );
-        res.moveToFirst();
+        Cursor cursor;
+        try{
+            cursor =  db.rawQuery( selectQuery , null );
+        }catch (SQLiteException e){
+            Log.e("mm", e.getMessage());
+            db.execSQL(selectQuery);
+            return cashHistoryArrayList;
+        }
+        cursor.moveToFirst();
 
         String name;
         String amt;
 
-        while(res.isAfterLast() == false){
-            name = res.getString(res.getColumnIndex(COLUMN_ITEM_NAME));
-            amt = res.getString(res.getColumnIndex(COLUMN_AMOUNT));
+        while(cursor.isAfterLast() == false){
+            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
+            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
 
             MyListData t = new MyListData(name, amt);
 
             cashHistoryArrayList.add(t);
-            res.moveToNext();
+            cursor.moveToNext();
         }
 
-        Log.e("mm", String.valueOf(cashHistoryArrayList.size()) );
-        Log.e("mm", selectQuery );
+        db.close();
+//        Log.e("mm", String.valueOf(cashHistoryArrayList.size()) );
+//        Log.e("mm", selectQuery );
 
         return cashHistoryArrayList;
     }

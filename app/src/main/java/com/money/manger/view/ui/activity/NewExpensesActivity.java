@@ -1,18 +1,16 @@
 package com.money.manger.view.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.money.manger.R;
-import com.money.manger.view.database.DatabaseHandler;
+import com.money.manger.view.database.DbHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,10 +25,15 @@ public class NewExpensesActivity extends AppCompatActivity {
     @BindView(R.id.amtEditText)
     EditText amtEditText;
 
-    SQLiteDatabase sqLiteDatabaseObj;
-    String NameHolder, NumberHolder, SQLiteDataBaseQueryHolder;
-    Boolean EditTextEmptyHold;
+    @BindView(R.id.name_layout)
+    TextInputLayout nameLayout;
+
+    @BindView(R.id.amt_layout)
+    TextInputLayout amtLayout;
+
     String dateString;
+
+    DbHelper dbhelper;
 
 
 
@@ -48,7 +51,7 @@ public class NewExpensesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         getIntentValues(intent);
 
-        SQLiteDataBaseBuild();
+        dbhelper =new DbHelper(this);
 
     }
 
@@ -57,48 +60,35 @@ public class NewExpensesActivity extends AppCompatActivity {
         dateString = "" + intent.getStringExtra("date");
     }
 
-    // create sqlite db and table
-    public void SQLiteDataBaseBuild(){
 
-        sqLiteDatabaseObj = openOrCreateDatabase("MoneyDataBase", Context.MODE_PRIVATE, null);
-        sqLiteDatabaseObj.execSQL("CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, item_name VARCHAR, amount VARCHAR, date VARCHAR);");
+
+
+
+
+
+    @OnClick(R.id.add_button)
+    public void addButton(){
+
+        nameLayout.setErrorEnabled(false);
+        amtLayout.setErrorEnabled(false);
+
+        if(nameEditText.getText().toString().isEmpty() ){
+            nameLayout.setError("Enter Valid Item Name");
+            return;
+        }
+        if(amtEditText.getText().toString().isEmpty() ){
+            amtLayout.setError("Amount Must Not Be Empty");
+            return;
+        }
+
+        addNewRow();
 
     }
 
-    public void CheckEditTextStatus(){
-
-        NameHolder = nameEditText.getText().toString() ;
-        NumberHolder = amtEditText.getText().toString();
-
-        if(TextUtils.isEmpty(NameHolder) || TextUtils.isEmpty(NumberHolder)){
-
-            EditTextEmptyHold = false ;
-
-        }
-        else {
-
-            EditTextEmptyHold = true ;
-        }
-    }
-
-    public void InsertDataIntoSQLiteDatabase(){
-
-        if(EditTextEmptyHold == true)
-        {
-
-            SQLiteDataBaseQueryHolder = "INSERT INTO Expenses (item_name,amount,date) VALUES('"+NameHolder+"', '"+NumberHolder+"', '"+dateString+"');";
-
-            sqLiteDatabaseObj.execSQL(SQLiteDataBaseQueryHolder);
-
-            Toast.makeText(NewExpensesActivity.this,"Data Inserted Successfully", Toast.LENGTH_LONG).show();
-
-        }
-        else {
-
-            Toast.makeText(NewExpensesActivity.this,"Please Fill All The Required Fields.", Toast.LENGTH_LONG).show();
-
-        }
-
+    public void addNewRow(){
+        dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+        Log.e("mm", "data inserted");
+        EmptyEditTextAfterDataInsert();
     }
 
     public void EmptyEditTextAfterDataInsert(){
@@ -109,14 +99,6 @@ public class NewExpensesActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.add_button)
-    public void addButton(){
-
-        CheckEditTextStatus();
-        InsertDataIntoSQLiteDatabase();
-        EmptyEditTextAfterDataInsert();
-
-    }
 
 
     @Override

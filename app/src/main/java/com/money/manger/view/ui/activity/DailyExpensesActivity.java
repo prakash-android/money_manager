@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.money.manger.R;
 import com.money.manger.model.MyListData;
+import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.ui.adapter.MyListAdapter;
 
 import java.util.ArrayList;
@@ -41,10 +43,8 @@ public class DailyExpensesActivity extends AppCompatActivity {
     String dateString = "";
     String uiDateString = "";
     Double dailyTotal = 0.0;
-    SQLiteDatabase sqLiteDatabaseObj;
-    private ArrayList<String> date = new ArrayList<String>();
-    private ArrayList<String> itemName = new ArrayList<String>();
-    private ArrayList<String> Amount = new ArrayList<String>();
+
+    DbHelper dbhelper;
     ArrayList<MyListData> myListData = new ArrayList<MyListData>();
 
 
@@ -57,6 +57,8 @@ public class DailyExpensesActivity extends AppCompatActivity {
         setToolbar();
         Intent intent = getIntent();
         getIntentValues(intent);
+
+        dbhelper = new DbHelper(this);
         displayListValues();
     }
 
@@ -105,36 +107,31 @@ public class DailyExpensesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+
     //get value from db
     private void getData() {
 
-        sqLiteDatabaseObj = openOrCreateDatabase("MoneyDataBase", Context.MODE_PRIVATE, null);
-        sqLiteDatabaseObj.execSQL("CREATE TABLE IF NOT EXISTS Expenses(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, item_name VARCHAR, amount VARCHAR, date VARCHAR);");
-
-        Cursor cursor = sqLiteDatabaseObj.rawQuery("SELECT * FROM  Expenses WHERE date = ?",new String[] { dateString });
-        Amount.clear();
-        itemName.clear();
+        //reset defaults
         myListData.clear();
         dailyTotal = 0.0;
-        String t1, t2;
-        if (cursor.moveToFirst()) {
-            do {
-                t1 = cursor.getString(cursor.getColumnIndex("item_name"));
-                t2 = cursor.getString(cursor.getColumnIndex("amount"));
-                myListData.add(new MyListData(t1,t2));
-                dailyTotal += Double.valueOf(t2);
-                itemName.add(cursor.getString(cursor.getColumnIndex("item_name")));
-                Amount.add(cursor.getString(cursor.getColumnIndex("amount")));
-            } while (cursor.moveToNext());
+
+        //get values n calculate dailytotal
+        myListData .addAll( dbhelper.getAllCashHistory(dateString));
+
+        String t1;
+        for(MyListData item : myListData) {
+
+            t1 = item.getAmt();
+            dailyTotal += Double.valueOf(t1);
         }
-        cursor.close();
+
         updateDailyTotal();
     }
 
 
     public void updateDailyTotal(){
         invalidateOptionsMenu();
-        ///Toast.makeText(this,"daily total: "+ dailyTotal.toString(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"daily total: "+ dailyTotal.toString(),Toast.LENGTH_SHORT).show();
     }
 
 

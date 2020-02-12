@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.money.manger.R;
+import com.money.manger.model.MyListData;
+import com.money.manger.view.database.DbHelper;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
@@ -21,6 +23,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import org.threeten.bp.LocalDate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -46,8 +49,13 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     RelativeLayout rootLayout;
 
     String selectedDate = "";
+    String selectedMonth = "";
+    String monthOfDay = "";
+    int monthlyTotal = 0;
 
-//    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+    DbHelper dbhelper;
+    ArrayList<MyListData> myListData = new ArrayList<MyListData>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +63,10 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monthly_dateselection);
         ButterKnife.bind(this);
 
+        dbhelper = new DbHelper(this);
         setToolbar();
         setupListeners();
+
     }
 
 
@@ -76,7 +86,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        amtMenu.setTitle("100");
+        amtMenu.setTitle(String.valueOf(monthlyTotal));
         return true;
     }
 
@@ -116,6 +126,20 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         return formattedDate;
     }
 
+    public String formatMonthYear(String inputString){
+        String formattedDate = "";
+        try {
+            SimpleDateFormat originalFormat =
+                    new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM");
+            Date date = originalFormat.parse(inputString);
+            formattedDate = targetFormat.format(date);
+        } catch (Exception e){
+            Log.e("Exception", "" + e.getMessage());
+        }
+        return formattedDate;
+    }
+
 
     // get double digits in date
     public String doubleDigitNumber(int Date) {
@@ -140,7 +164,10 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         selectedDate = ( mYear + "-" + doubleDigitNumber((mMonth + 1)) + "-" + doubleDigitNumber(mDay));
+        // sets value for first time fetch
         toolbar.setTitle(formatMonth(selectedDate));
+        monthOfDay = formatMonthYear(selectedDate);
+        //getMonthlyData();
 
 
         calenderView.setSelectedDate(LocalDate.parse(selectedDate));
@@ -162,7 +189,11 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 final String text = String.valueOf(date.getDate());
-                toolbar.setTitle(formatMonth(text));
+                selectedMonth = formatMonth(text);
+                monthOfDay = formatMonthYear(text);
+                Log.e("mm" , monthOfDay );
+                toolbar.setTitle(selectedMonth);
+                getMonthlyData();
             }
         });
     }
@@ -179,10 +210,33 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     }
 
 
+    //get value from db
+    private void getMonthlyData() {
+
+        //reset defaults
+        myListData.clear();
+        monthlyTotal = 0;
+
+        myListData.addAll( dbhelper.getAllMonthCashHistory(monthOfDay));
+
+        String t1;
+        for(MyListData item : myListData) {
+
+            t1 = item.getAmt();
+            monthlyTotal += Integer.parseInt(t1);
+        }
+
+
+
+        // updates value in toolbar
+        invalidateOptionsMenu();
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-       // dateTextView.setText(formatDate(selectedDate));
+        getMonthlyData();
     }
 }
 

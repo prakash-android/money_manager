@@ -48,7 +48,14 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-
+    /**
+     * @param name , @param amt, @param date
+     * @return boolean
+     * -----------------------------------------
+     * insert new row in table
+     * insertOrThrow method returns value of result (-1 on failure)
+     * else use insert method n validate result returned
+     */
     public boolean addCashHistory (String name, String amt, String date) {
         boolean s;
 
@@ -80,7 +87,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * exceptions handled - invalid query, empty result returned, other sqlite basic exceptions
      * closing cursor and db connection at last - to avoid other errors
      */
-    public ArrayList<MyListData> getAllCashHistory(String sDate){
+    public ArrayList<MyListData> getAllDateCashHistory(String sDate){
         ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
 
         String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
@@ -129,6 +136,66 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
         return cashHistoryArrayList;
     }
+
+
+    /**
+     * @param sMonth
+     * @return arrayList of cash history data in selected month
+     * ----------------------------------------------------------
+     * strftime('%Y-%m', column_name) - crops date to preferred format
+     */
+    public ArrayList<MyListData> getAllMonthCashHistory(String sMonth){
+        ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
+
+        String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE strftime( '%Y-%m', "+ COLUMN_DATE + " ) = " + '"'+ sMonth +'"' + ";" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        String name;
+        String amt;
+        int rowCount;
+        try{
+            cursor =  db.rawQuery( selectQuery , null );
+            if (cursor != null){
+                rowCount = cursor.getCount();
+                try{
+                    if (cursor.moveToNext()) {
+
+                        while (!cursor.isAfterLast()) {
+                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
+                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+
+                            MyListData t = new MyListData(name, amt);
+
+                            cashHistoryArrayList.add(t);
+                            cursor.moveToNext();
+                        }
+                    } else {
+                        //query result was empty, handle here
+                        Log.e("mm", "rows returned " + rowCount );
+                        Log.e("mm", selectQuery);
+                    }
+
+                } finally {
+                    //close cursor here
+                    cursor.close();
+                }
+            }
+
+        }catch (SQLiteException e){
+            //handles all sqlite exceptions & returns empty arrayList
+            Log.e("mm", e.getMessage());
+            Log.e("mm", selectQuery);
+            return cashHistoryArrayList;
+        }
+
+
+        //close db connection
+        db.close();
+        Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        return cashHistoryArrayList;
+    }
+
 
 
 }

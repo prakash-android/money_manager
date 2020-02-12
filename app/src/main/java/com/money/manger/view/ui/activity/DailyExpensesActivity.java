@@ -59,7 +59,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
         getIntentValues(intent);
 
         dbhelper = new DbHelper(this);
-        displayListValues();
+//        displayListValues();
     }
 
 

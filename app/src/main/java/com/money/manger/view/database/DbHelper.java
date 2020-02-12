@@ -58,7 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_AMOUNT , amt);
         contentValues.put(COLUMN_DATE , date);
 
-        // insert row
+        // insert row (insertOrThrow method)
         long success = db.insert(MONEY_TABLE , null, contentValues);
         s = success != -1L;
 
@@ -69,17 +69,85 @@ public class DbHelper extends SQLiteOpenHelper {
         return s;
     }
 
+
+    /**
+     * @param sDate
+     * @return array list of cash history data
+     * -----------------------------------------------------------------------
+     * moveToFirst() - moves cursor to first row
+     * moveTONext() - moves cursor to next row
+     * isAfterLast() - @boolean checks if cursor is at last row in result
+     * exceptions handled - invalid query, empty result returned, other sqlite basic exceptions
+     * closing cursor and db connection at last - to avoid other errors
+     */
     public ArrayList<MyListData> getAllCashHistory(String sDate){
         ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
 
         String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
         SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        String name;
+        String amt;
+        int rowCount;
+        try{
+            cursor =  db.rawQuery( selectQuery , null );
+            if (cursor != null){
+                    rowCount = cursor.getCount();
+                try{
+                    if (cursor.moveToNext()) {
+
+                        while (!cursor.isAfterLast()) {
+                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
+                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+
+                            MyListData t = new MyListData(name, amt);
+
+                            cashHistoryArrayList.add(t);
+                            cursor.moveToNext();
+                        }
+                    } else {
+                        //query result was empty, handle here
+                        Log.e("mm", "rows returned " + rowCount );
+                    }
+
+                } finally {
+                    //close cursor here
+                    cursor.close();
+                }
+            }
+
+        }catch (SQLiteException e){
+            //handles all sqlite exceptions & returns empty arrayList
+            Log.e("mm", e.getMessage());
+            return cashHistoryArrayList;
+        }
+
+
+        //close db connection
+        db.close();
+        Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        return cashHistoryArrayList;
+    }
+
+
+}
+
+
+
+
+/*
+    public ArrayList<MyListData> getAllCashHistory(String sDate){
+        ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
+
+        String selectQuery = "SELECT  FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        //exception - handle invalid queries
         Cursor cursor;
         try{
             cursor =  db.rawQuery( selectQuery , null );
         }catch (SQLiteException e){
             Log.e("mm", e.getMessage());
-            db.execSQL(selectQuery);
             return cashHistoryArrayList;
         }
         cursor.moveToFirst();
@@ -99,10 +167,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.close();
 //        Log.e("mm", String.valueOf(cashHistoryArrayList.size()) );
-//        Log.e("mm", selectQuery );
 
         return cashHistoryArrayList;
     }
-
-
-}
+*/

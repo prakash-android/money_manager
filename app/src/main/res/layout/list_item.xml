@@ -6,7 +6,6 @@
     android:clickable="true"
     android:focusable="true"
     android:elevation="5dp"
-    android:foreground="?attr/selectableItemBackground"
     android:layout_margin="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -70,6 +69,7 @@
             android:id="@+id/overflow_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
             android:background="@drawable/ic_more"
              />
 

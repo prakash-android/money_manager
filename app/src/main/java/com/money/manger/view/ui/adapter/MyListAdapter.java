@@ -54,7 +54,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
                 PopupMenu popup = new PopupMenu(mContext, view);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.overflow_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mContext,myListData));
+                popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mContext, myListData, listdata, position));
                 popup.show();
             }
         });

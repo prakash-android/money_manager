@@ -1,15 +1,19 @@
 package com.money.manger.view.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.money.manger.R;
 import com.money.manger.model.MyListData;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.ui.activity.DailyExpensesActivity;
+
+import java.util.ArrayList;
 
 /**
  * overflow menu item listener class set to recyclerview adapter
@@ -25,15 +29,22 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     String item;
     String amt;
     int id;
+    int position;
+    private RecyclerView.Adapter mAdapter;
+    private ArrayList<MyListData> allList;
 
 
-    public MyMenuItemClickListener(Context context, MyListData listData) {
+    public MyMenuItemClickListener(Context context, MyListData dummy, ArrayList<MyListData> original, int pos) {
         mContext = context;
         dbHelper = new DbHelper(mContext);
-        dummyData = listData;
-        item = listData.getItem();
-        amt = listData.getAmt();
-        id = listData.getId();
+        dummyData = dummy;
+        item = dummyData.getItem();
+        amt = dummyData.getAmt();
+        id = dummyData.getId();
+        allList = original;
+        position = pos;
+        // Initialize a new instance of RecyclerView Adapter instance
+         mAdapter = new MyListAdapter(mContext,allList);
     }
 
 
@@ -57,13 +68,17 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
 
     private void deleteAction() {
         boolean resultQuery = false;
+        Log.e("list", String.valueOf(allList) + " " + position);
         resultQuery = dbHelper.deleteItem(id);
 
         if(resultQuery){
+            // remove from listdata n update to adapter
+            allList.remove(position);
+            mAdapter.notifyItemRemoved(position);
+            //mAdapter.notifyDataSetChanged();
+            //mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+            Log.e("list", String.valueOf(allList));
             Toast.makeText(mContext, "expenses deleted", Toast.LENGTH_LONG).show();
-            //update ui
-//            mylistdata.remove(getAdapterPosition());
-//            MyListAdapter.notifyDataSetChanged();
         }else{
             Toast.makeText(mContext, "error occurred", Toast.LENGTH_LONG).show();
         }

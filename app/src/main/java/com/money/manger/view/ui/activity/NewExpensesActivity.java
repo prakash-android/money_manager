@@ -72,7 +72,8 @@ public class NewExpensesActivity extends AppCompatActivity {
         nameLayout.setErrorEnabled(false);
         amtLayout.setErrorEnabled(false);
 
-        if(nameEditText.getText().toString().isEmpty() ){
+        //validate whitespace in edittext
+        if(nameEditText.getText().toString().isEmpty() || nameEditText.getText().toString().equals(" ")){
             nameLayout.setError("Enter Valid Item Name");
             return;
         }

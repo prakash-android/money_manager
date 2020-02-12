@@ -14,7 +14,8 @@ import com.money.manger.view.ui.activity.DailyExpensesActivity;
 /**
  * overflow menu item listener class set to recyclerview adapter
  * handling action selection in overflow menu here
- * selected {positioned listData is sent here} card data is sent here, here we separate items n apply
+ * selected {with row id} card data is sent here, here we separate items n apply
+ * update ui after delete
  */
 class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
 
@@ -23,16 +24,16 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     MyListData dummyData;
     String item;
     String amt;
-    int position;
+    int id;
 
 
-    public MyMenuItemClickListener(Context context, MyListData listData, int pos) {
+    public MyMenuItemClickListener(Context context, MyListData listData) {
         mContext = context;
         dbHelper = new DbHelper(mContext);
         dummyData = listData;
         item = listData.getItem();
         amt = listData.getAmt();
-        position = pos;
+        id = listData.getId();
     }
 
 
@@ -51,14 +52,20 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
     }
 
     private void editAction() {
-        Toast.makeText(mContext,  item + " "+ amt + " " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext,  item + " "+ amt + " " + id, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteAction() {
-        dbHelper.deleteItem(position);
+        boolean resultQuery = false;
+        resultQuery = dbHelper.deleteItem(id);
 
-        //update view, causes error
-//        DailyExpensesActivity d = new DailyExpensesActivity();
-//        d.displayListValues();
+        if(resultQuery){
+            Toast.makeText(mContext, "expenses deleted", Toast.LENGTH_LONG).show();
+            //update ui
+//            mylistdata.remove(getAdapterPosition());
+//            MyListAdapter.notifyDataSetChanged();
+        }else{
+            Toast.makeText(mContext, "error occurred", Toast.LENGTH_LONG).show();
+        }
     }
 }

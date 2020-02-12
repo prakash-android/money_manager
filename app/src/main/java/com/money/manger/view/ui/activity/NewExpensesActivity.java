@@ -90,7 +90,7 @@ public class NewExpensesActivity extends AppCompatActivity {
         queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
 
         if(queryResult) {
-            Toast.makeText(this, "data inserted successfully",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "expenses added",Toast.LENGTH_LONG).show();
             onBackPressed();
         } else {
             Toast.makeText(this, "error occurred",Toast.LENGTH_LONG).show();

@@ -94,6 +94,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
+        int id;
         String name;
         String amt;
         int rowCount;
@@ -105,10 +106,11 @@ public class DbHelper extends SQLiteOpenHelper {
                     if (cursor.moveToNext()) {
 
                         while (!cursor.isAfterLast()) {
+                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
 
-                            MyListData t = new MyListData(name, amt);
+                            MyListData t = new MyListData(id, name, amt);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
@@ -151,6 +153,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
+        int id;
         String name;
         String amt;
         int rowCount;
@@ -162,10 +165,11 @@ public class DbHelper extends SQLiteOpenHelper {
                     if (cursor.moveToNext()) {
 
                         while (!cursor.isAfterLast()) {
+                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
 
-                            MyListData t = new MyListData(name, amt);
+                            MyListData t = new MyListData(id, name, amt);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
@@ -198,12 +202,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /**
      * delete particular row with id from table
+     * checks result/ row returned > 0
+     * returns boolean
      */
-    public Integer deleteItem (Integer id) {
+    public boolean deleteItem (Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(MONEY_TABLE,
-                "ID = ? ",
-                new String[] { Integer.toString(id) });
+
+        boolean s = db.delete(MONEY_TABLE,
+                COLUMN_ID + " = ? ",
+                new String[] { Integer.toString(id) }) > 0;
+
+        Log.e("deleteItem", "" + s );
+
+        return s;
     }
 
 

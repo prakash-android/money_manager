@@ -41,8 +41,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
     /**
      * @param holder, position
      * pass data via listener to class
-     * get id n pass in position here
-     *
+     * send listData to listener
      */
     @Override
     public void onBindViewHolder(@NonNull MyListAdapter.ViewHolder holder, int position) {
@@ -55,7 +54,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
                 PopupMenu popup = new PopupMenu(mContext, view);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.overflow_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mContext,myListData, position+1));
+                popup.setOnMenuItemClickListener(new MyMenuItemClickListener(mContext,myListData));
                 popup.show();
             }
         });
@@ -74,7 +73,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
             super(itemView);
             this.textViewItem = (TextView) itemView.findViewById(R.id.textViewItem);
             this.textViewAmt = (TextView) itemView.findViewById(R.id.textViewAmount);
-            this.imageButtonOverflow = (ImageButton) itemView.findViewById(R.id.overflow_menu);
+            this.imageButtonOverflow = (ImageButton) itemView.findViewById(R.id.overflow_icon);
         }
     }
 }

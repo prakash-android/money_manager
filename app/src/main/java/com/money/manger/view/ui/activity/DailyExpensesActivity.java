@@ -95,13 +95,13 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
 
 
-    public void displayListValues() {
+        public void displayListValues() {
 
         getData();
 
         // set value to recyclerview
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_list);
-        MyListAdapter adapter = new MyListAdapter(myListData);
+        MyListAdapter adapter = new MyListAdapter(this, myListData);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

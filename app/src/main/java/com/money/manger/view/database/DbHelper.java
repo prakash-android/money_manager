@@ -196,6 +196,16 @@ public class DbHelper extends SQLiteOpenHelper {
         return cashHistoryArrayList;
     }
 
+    /**
+     * delete particular row with id from table
+     */
+    public Integer deleteItem (Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(MONEY_TABLE,
+                "ID = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
 
 
 }

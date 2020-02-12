@@ -8,12 +8,14 @@ public class MyListData{
         this.item_name = item_name;
         this.amt = amt;
     }
+
     public String getItem() {
         return item_name;
     }
     public void setItem(String item_name) {
         this.item_name = item_name;
     }
+
     public String getAmt() {
         return amt;
     }

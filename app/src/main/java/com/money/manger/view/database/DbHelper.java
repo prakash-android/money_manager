@@ -97,6 +97,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int id;
         String name;
         String amt;
+        String date;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
@@ -109,8 +110,9 @@ public class DbHelper extends SQLiteOpenHelper {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
 
-                            MyListData t = new MyListData(id, name, amt);
+                            MyListData t = new MyListData(id, name, amt, date);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
@@ -154,6 +156,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int id;
         String name;
         String amt;
+        String date;
         int total = 0;
         int rowCount;
         try{
@@ -167,9 +170,10 @@ public class DbHelper extends SQLiteOpenHelper {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
                             total += Integer.parseInt(amt);
 
-                            MyListData t = new MyListData(id, name, amt);
+                            MyListData t = new MyListData(id, name, amt, date);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
@@ -215,6 +219,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int id;
         String name;
         String amt;
+        String date;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
@@ -227,8 +232,9 @@ public class DbHelper extends SQLiteOpenHelper {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
 
-                            MyListData t = new MyListData(id, name, amt);
+                            MyListData t = new MyListData(id, name, amt, date);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
@@ -275,6 +281,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int id;
         String name;
         String amt;
+        String date;
         int total = 0;
         int rowCount;
         try{
@@ -288,9 +295,10 @@ public class DbHelper extends SQLiteOpenHelper {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
                             total += Integer.parseInt(amt);
 
-                            MyListData t = new MyListData(id, name, amt);
+                            MyListData t = new MyListData(id, name, amt, date);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();

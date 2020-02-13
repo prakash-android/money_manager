@@ -1,6 +1,7 @@
 package com.money.manger.view.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.money.manger.R;
 import com.money.manger.model.MyListData;
 import com.money.manger.view.database.DbHelper;
+import com.money.manger.view.ui.activity.EditExpensesActivity;
 
 import java.util.ArrayList;
 
@@ -68,7 +70,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_edit:
-                                editAction(listdata.get(position).getId(), listdata.get(position).getItem(), listdata.get(position).getAmt());
+                                editAction(listdata.get(position).getId(), listdata.get(position).getItem(), listdata.get(position).getAmt(), listdata.get(position).getDate());
                                 return true;
                             case R.id.action_delete:
                                 deleteAction(position, listdata.get(position).getId());
@@ -104,8 +106,15 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
     }
 
     //edit the values
-    public void editAction(int id, String item, String amt) {
+    public void editAction(int id, String item, String amt, String date) {
         Toast.makeText(mContext,  item + " "+ amt + " " + id, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(mContext, EditExpensesActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", item);
+        intent.putExtra("amt", amt);
+        intent.putExtra("date", date);
+        mContext.startActivity(intent);
+        //overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
     }
 
 

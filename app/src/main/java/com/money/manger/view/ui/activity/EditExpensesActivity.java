@@ -138,26 +138,27 @@ public class EditExpensesActivity extends AppCompatActivity {
 
         if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(amtString) ) {
             builder = new AlertDialog.Builder(this);
-            builder.setTitle("Alert");
-            builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?")
+            builder.setTitle("Content Changed");
+            builder.setMessage("Do you want to save your edits?")
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            updateRow();
                             finish();
                             overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
                         }
                     })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Discard", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             finish();
                             overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
-                        }
-                    })
-                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
                         }
                     });
+//                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            dialog.dismiss();
+//                        }
+//                    });
 
             //Creating dialog box
             AlertDialog alert = builder.create();

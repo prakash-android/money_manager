@@ -42,6 +42,7 @@ public class NewExpensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expenses);
         ButterKnife.bind(this);
+        dbhelper =new DbHelper(this);
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null){
@@ -50,8 +51,6 @@ public class NewExpensesActivity extends AppCompatActivity {
         }
         Intent intent = getIntent();
         getIntentValues(intent);
-
-        dbhelper =new DbHelper(this);
 
     }
 

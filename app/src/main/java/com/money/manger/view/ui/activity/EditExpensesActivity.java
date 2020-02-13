@@ -32,6 +32,9 @@ public class EditExpensesActivity extends AppCompatActivity {
     TextInputLayout amtLayout;
 
     String dateString;
+    String nameString;
+    String amtString;
+    int id = 0;
 
     DbHelper dbhelper;
 
@@ -42,6 +45,7 @@ public class EditExpensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_expenses);
         ButterKnife.bind(this);
+        dbhelper =new DbHelper(this);
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null){
@@ -51,23 +55,26 @@ public class EditExpensesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         getIntentValues(intent);
 
-        dbhelper =new DbHelper(this);
-
     }
 
 
     public void getIntentValues(Intent intent) {
+        id = intent.getIntExtra("id", id);
+        nameString = intent.getStringExtra("name");
+        amtString = intent.getStringExtra("amt");
         dateString = "" + intent.getStringExtra("date");
+
+        setIntentValues();
+    }
+
+    private void setIntentValues() {
+        nameEditText.setText(nameString);
+        amtEditText.setText(amtString);
     }
 
 
-
-
-
-
-
-    @OnClick(R.id.add_button)
-    public void addButton(){
+    @OnClick(R.id.update_button)
+    public void updateButton(){
 
         nameLayout.setErrorEnabled(false);
         amtLayout.setErrorEnabled(false);
@@ -88,7 +95,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     public void updateRow(){
         boolean queryResult = false;
-        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+        //queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
 
         if(queryResult) {
             Toast.makeText(this, "expenses updated",Toast.LENGTH_LONG).show();

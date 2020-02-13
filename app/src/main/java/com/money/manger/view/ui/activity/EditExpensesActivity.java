@@ -108,7 +108,7 @@ public class EditExpensesActivity extends AppCompatActivity {
                     R.anim.back_right_to_left
             );
         } else {
-            Toast.makeText(this, "error occurred",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error occurred",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -139,10 +139,7 @@ public class EditExpensesActivity extends AppCompatActivity {
         if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(amtString) ) {
             builder = new AlertDialog.Builder(this);
             builder.setTitle("Alert");
-            builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?");
-
-            //Setting message manually and performing action on button click
-            builder.setMessage("Do you want to close this application ?")
+            builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {

@@ -61,16 +61,18 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/overflow_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.3">
 
         <ImageButton
-            android:id="@+id/overflow_icon"
+            android:id="@+id/overflow_imagebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:padding="10dp"
             android:layout_margin="10dp"
             android:foreground="?attr/selectableItemBackground"
             android:background="@drawable/ic_more"

@@ -78,6 +78,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     /**
+     * @param id
+     * @return boolean
+     * ----------------------------
+     * update values to row with id (unique field)
+     */
+    public boolean updateCashHistory (Integer id, String name, String amt, String date) {
+        boolean s;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ITEM_NAME, name);
+        contentValues.put(COLUMN_AMOUNT, amt);
+        contentValues.put(COLUMN_DATE, date);
+
+        //update row
+        long success = db.update( MONEY_TABLE , contentValues, COLUMN_ID + " = ? ", new String[] { Integer.toString(id) } );
+        s = success != -1L;
+
+        db.close();
+
+        Log.e("updateCashHistory", "" + s);
+        return true;
+    }
+
+
+    /**
      * @param sDate
      * @return array list of cash history data
      * -----------------------------------------------------------------------

@@ -1,11 +1,13 @@
 package com.money.manger.view.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -37,6 +39,7 @@ public class EditExpensesActivity extends AppCompatActivity {
     int id = 0;
 
     DbHelper dbhelper;
+    AlertDialog.Builder builder;
 
 
 
@@ -95,7 +98,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     public void updateRow(){
         boolean queryResult = false;
-        //queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+        queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
 
         if(queryResult) {
             Toast.makeText(this, "expenses updated",Toast.LENGTH_LONG).show();
@@ -127,6 +130,41 @@ public class EditExpensesActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.back_left_to_right,R.anim.back_right_to_left);
+    }
+
+   //check for data changed
+    public void alertDialog() {
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
+        builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?");
+
+        //Setting message manually and performing action on button click
+        builder.setMessage("Do you want to close this application ?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+                    }
+                })
+                .setNeutralButton("Cancel",  new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+
     }
 
 }

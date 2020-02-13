@@ -1,6 +1,7 @@
 package com.money.manger.view.ui.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import com.money.manger.R;
@@ -94,20 +96,42 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
     // removes the row
     public void deleteAction(int position, int id) {
-        boolean resultQuery = false;
-        resultQuery = dbHelper.deleteItem(id);
-        if(resultQuery) {
-            listdata.remove(position);
-            notifyItemRemoved(position);
-            Toast.makeText(mContext, "expenses deleted", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(mContext, "error occurred", Toast.LENGTH_LONG).show();
-        }
+
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Confirm");
+
+            builder.setMessage("Do you want to delete?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            //execute db delete operation
+                            boolean resultQuery = dbHelper.deleteItem(id);
+                            if(resultQuery) {
+                                listdata.remove(position);
+                                notifyItemRemoved(position);
+                                Toast.makeText(mContext, "expenses deleted", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(mContext, "error occurred", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                           dialog.dismiss();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            alert.setCancelable(false);
+            alert.show();
+
     }
+
 
     //edit the values
     public void editAction(int id, String item, String amt, String date) {
-        Toast.makeText(mContext,  item + " "+ amt + " " + id, Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent(mContext, EditExpensesActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("name", item);

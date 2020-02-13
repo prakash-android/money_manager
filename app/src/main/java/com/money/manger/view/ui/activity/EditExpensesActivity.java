@@ -120,16 +120,14 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
-        overridePendingTransition(R.anim.back_left_to_right,R.anim.back_right_to_left);
+        alertDialog();
         return true;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        overridePendingTransition(R.anim.back_left_to_right,R.anim.back_right_to_left);
+        alertDialog();
     }
 
    //check for data changed

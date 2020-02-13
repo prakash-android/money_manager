@@ -94,8 +94,8 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
 
 
-    // removes the row
-    public void deleteAction(int position, int id) {
+    // removes the row, beware using id with ID
+    public void deleteAction(int position, int ID) {
 
             AlertDialog.Builder builder;
             builder = new AlertDialog.Builder(mContext);
@@ -106,7 +106,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
                         public void onClick(DialogInterface dialog, int id) {
 
                             //execute db delete operation
-                            boolean resultQuery = dbHelper.deleteItem(id);
+                            boolean resultQuery = dbHelper.deleteItem(ID);
                             if(resultQuery) {
                                 listdata.remove(position);
                                 notifyItemRemoved(position);

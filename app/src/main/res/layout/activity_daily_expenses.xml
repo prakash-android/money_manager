@@ -21,6 +21,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -49,6 +52,8 @@
 
 
         </androidx.core.widget.NestedScrollView>
+
+        </RelativeLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

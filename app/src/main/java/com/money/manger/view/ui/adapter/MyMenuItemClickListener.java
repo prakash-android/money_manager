@@ -75,8 +75,6 @@ class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
             // remove from listdata n update to adapter
             allList.remove(position);
             mAdapter.notifyItemRemoved(position);
-            //mAdapter.notifyDataSetChanged();
-            //mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
             Log.e("list", String.valueOf(allList));
             Toast.makeText(mContext, "expenses deleted", Toast.LENGTH_LONG).show();
         }else{

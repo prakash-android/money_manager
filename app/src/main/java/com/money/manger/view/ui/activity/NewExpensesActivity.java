@@ -87,7 +87,7 @@ public class NewExpensesActivity extends AppCompatActivity {
 
     public void addNewRow(){
         boolean queryResult = false;
-        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString );
 
         if(queryResult) {
             Toast.makeText(this, "expenses added",Toast.LENGTH_LONG).show();

@@ -35,7 +35,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     String dateString;
     String nameString;
-    String amtString;
+    int amt = 0;
     int id = 0;
 
     DbHelper dbhelper;
@@ -64,7 +64,7 @@ public class EditExpensesActivity extends AppCompatActivity {
     public void getIntentValues(Intent intent) {
         id = intent.getIntExtra("id", id);
         nameString = intent.getStringExtra("name");
-        amtString = intent.getStringExtra("amt");
+        amt = intent.getIntExtra("amt", amt);
         dateString = "" + intent.getStringExtra("date");
 
         setIntentValues();
@@ -72,7 +72,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     private void setIntentValues() {
         nameEditText.setText(nameString);
-        amtEditText.setText(amtString);
+        amtEditText.setText(String.valueOf(amt));
     }
 
 
@@ -98,7 +98,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     public void updateRow(){
         boolean queryResult = false;
-        queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
+        queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString );
 
         if(queryResult) {
             Toast.makeText(this, "Update success",Toast.LENGTH_LONG).show();
@@ -136,7 +136,7 @@ public class EditExpensesActivity extends AppCompatActivity {
    //check for data changed
     public void alertDialog() {
 
-        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(amtString) ) {
+        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(String.valueOf(amt)) ) {
             builder = new AlertDialog.Builder(this);
             builder.setTitle("Content Changed");
             builder.setMessage("Do you want to save your edits?")

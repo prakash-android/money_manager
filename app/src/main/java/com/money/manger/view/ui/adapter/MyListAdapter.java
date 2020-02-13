@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,16 +53,17 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
      * @param holder, position
      * pass data via listener to class
      * send listData to listener
+     * always check datatypes in db, adapter, view setters.
      */
     @Override
     public void onBindViewHolder(@NonNull MyListAdapter.ViewHolder holder, int position) {
         final MyListData myListData = listdata.get(position);
         holder.textViewItem.setText(listdata.get(position).getItem());
-        holder.textViewAmt.setText(listdata.get(position).getAmt());
+        holder.textViewAmt.setText(String.valueOf(listdata.get(position).getAmt()));
 
 
 
-        holder.overflowImageButton.setOnClickListener(new View.OnClickListener() {
+        holder.overflowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(mContext, view);
@@ -130,7 +132,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
 
     //edit the values
-    public void editAction(int id, String item, String amt, String date) {
+    public void editAction(int id, String item, int amt, String date) {
 
         Intent intent = new Intent(mContext, EditExpensesActivity.class);
         intent.putExtra("id", id);
@@ -146,12 +148,12 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textViewItem;
         public TextView textViewAmt;
-        public ImageButton overflowImageButton;
+        public ImageView overflowImageView;
         public ViewHolder(View itemView) {
             super(itemView);
             this.textViewItem = (TextView) itemView.findViewById(R.id.textViewItem);
             this.textViewAmt = (TextView) itemView.findViewById(R.id.textViewAmount);
-            this.overflowImageButton = (ImageButton) itemView.findViewById(R.id.overflow_imagebutton);
+            this.overflowImageView = (ImageView) itemView.findViewById(R.id.overflow_image);
         }
     }
 }

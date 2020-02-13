@@ -2,11 +2,11 @@ package com.money.manger.model;
 
 public class MyListData{
     private String item_name;
-    private String amt;
+    private int amt;
     private String date;
     private int id;
 
-    public MyListData(int id, String item_name, String amt, String date) {
+    public MyListData(int id, String item_name, int amt, String date) {
         this.item_name = item_name;
         this.amt = amt;
         this.id = id;
@@ -27,10 +27,10 @@ public class MyListData{
         this.item_name = item_name;
     }
 
-    public String getAmt() {
+    public int getAmt() {
         return amt;
     }
-    public void setAmt(String amt) {
+    public void setAmt(int amt) {
         this.amt = amt;
     }
 

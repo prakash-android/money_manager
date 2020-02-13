@@ -32,11 +32,15 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * always beware of variable dataType used in adapter, view setters, database
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TABLE " + MONEY_TABLE +
-                        "(" + COLUMN_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COLUMN_ITEM_NAME + " text," +  COLUMN_AMOUNT + " text," +  COLUMN_DATE + " date)"
+                        "(" + COLUMN_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COLUMN_ITEM_NAME + " text," +  COLUMN_AMOUNT + " integer," +  COLUMN_DATE + " date)"
         );
 
     }
@@ -56,7 +60,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * insertOrThrow method returns value of result (-1 on failure)
      * else use insert method n validate result returned
      */
-    public boolean addCashHistory (String name, String amt, String date) {
+    public boolean addCashHistory (String name, int amt, String date) {
         boolean s;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -83,7 +87,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * ----------------------------
      * update values to row with id (unique field)
      */
-    public boolean updateCashHistory (Integer id, String name, String amt, String date) {
+    public boolean updateCashHistory (Integer id, String name, int amt, String date) {
         boolean s;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -122,7 +126,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         int id;
         String name;
-        String amt;
+        int amt;
         String date;
         int rowCount;
         try{
@@ -135,7 +139,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         while (!cursor.isAfterLast()) {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
-                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            amt = cursor.getInt(cursor.getColumnIndex(COLUMN_AMOUNT));
                             date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
 
                             MyListData t = new MyListData(id, name, amt, date);
@@ -169,41 +173,30 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /**
      * get sum of amount in date, calculate total
+     * by query string
+     * use cursor to get value
+     *** SUM(AMT) As TOTAL - its used to get returned columnIndex
+     *** SUM() - adds values in field  ( integer, text, varchar )
+     * ---------------------------------------------------------------
      * @param sDate
      * @return total
      */
     public int getAllDateCashHistoryTotal(String sDate){
-        ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
 
-        String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
+        String selectQuery = "SELECT "+ "SUM(" + COLUMN_AMOUNT + ") AS Total " +" FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
-        int id;
-        String name;
-        String amt;
-        String date;
-        int total = 0;
+        int totalAmt = 0;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
             if (cursor != null){
                 rowCount = cursor.getCount();
                 try{
-                    if (cursor.moveToNext()) {
+                    if (cursor.moveToFirst()) {
 
-                        while (!cursor.isAfterLast()) {
-                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
-                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
-                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
-                            total += Integer.parseInt(amt);
-
-                            MyListData t = new MyListData(id, name, amt, date);
-
-                            cashHistoryArrayList.add(t);
-                            cursor.moveToNext();
-                        }
+                        totalAmt = cursor.getInt(cursor.getColumnIndex("Total"));
                     } else {
                         //query result was empty, handle here
                         Log.e("mm", "rows returned " + rowCount );
@@ -218,14 +211,15 @@ public class DbHelper extends SQLiteOpenHelper {
         }catch (SQLiteException e){
             //handles all sqlite exceptions & returns empty arrayList
             Log.e("mm", e.getMessage());
-            return total;
+            return totalAmt;
         }
+
 
 
         //close db connection
         db.close();
-        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
-        return total;
+        Log.e("mm", "total value " + totalAmt );
+        return totalAmt;
     }
 
 
@@ -244,7 +238,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         int id;
         String name;
-        String amt;
+        int amt;
         String date;
         int rowCount;
         try{
@@ -257,7 +251,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         while (!cursor.isAfterLast()) {
                             id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
-                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            amt = cursor.getInt(cursor.getColumnIndex(COLUMN_AMOUNT));
                             date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
 
                             MyListData t = new MyListData(id, name, amt, date);
@@ -293,46 +287,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     /**
-     * get month total here
+     * get month total here by query string
+     * use cursor to get value
+     * --------------------------------------
      * @param sMonth
      * @return int (total)
      */
     public int getAllMonthCashHistoryTotal(String sMonth){
         ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
 
-        String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE strftime( '%Y-%m', "+ COLUMN_DATE + " ) = " + '"'+ sMonth +'"' + ";" ;
+        String selectQuery = "SELECT "+ "SUM(" + COLUMN_AMOUNT + ") AS Total " +" FROM "+  MONEY_TABLE + " WHERE strftime( '%Y-%m', "+ COLUMN_DATE + " ) = " + '"'+ sMonth +'"' + ";" ;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
-        int id;
-        String name;
-        String amt;
-        String date;
-        int total = 0;
+        int totalAmt = 0;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
             if (cursor != null){
                 rowCount = cursor.getCount();
                 try{
-                    if (cursor.moveToNext()) {
+                    if (cursor.moveToFirst()) {
 
-                        while (!cursor.isAfterLast()) {
-                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
-                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
-                            date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
-                            total += Integer.parseInt(amt);
-
-                            MyListData t = new MyListData(id, name, amt, date);
-
-                            cashHistoryArrayList.add(t);
-                            cursor.moveToNext();
-                        }
+                         totalAmt = cursor.getInt(cursor.getColumnIndex("Total"));
                     } else {
                         //query result was empty, handle here
                         Log.e("mm", "rows returned " + rowCount );
-                        Log.e("mm", selectQuery);
                     }
 
                 } finally {
@@ -344,15 +324,14 @@ public class DbHelper extends SQLiteOpenHelper {
         }catch (SQLiteException e){
             //handles all sqlite exceptions & returns empty arrayList
             Log.e("mm", e.getMessage());
-            Log.e("mm", selectQuery);
-            return total;
+            return totalAmt;
         }
 
 
         //close db connection
         db.close();
-        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
-        return total;
+        Log.e("mm", "total value " + totalAmt );
+        return totalAmt;
     }
 
 

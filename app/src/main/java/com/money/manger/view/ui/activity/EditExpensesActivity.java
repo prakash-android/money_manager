@@ -101,8 +101,12 @@ public class EditExpensesActivity extends AppCompatActivity {
         queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), ""+amtEditText.getText().toString(), ""+dateString );
 
         if(queryResult) {
-            Toast.makeText(this, "expenses updated",Toast.LENGTH_LONG).show();
-            onBackPressed();
+            Toast.makeText(this, "Update success",Toast.LENGTH_LONG).show();
+            finish();
+            overridePendingTransition(
+                    R.anim.back_left_to_right,
+                    R.anim.back_right_to_left
+            );
         } else {
             Toast.makeText(this, "error occurred",Toast.LENGTH_LONG).show();
         }
@@ -126,43 +130,47 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         alertDialog();
     }
 
    //check for data changed
     public void alertDialog() {
-        builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert");
-        builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?");
 
-        //Setting message manually and performing action on button click
-        builder.setMessage("Do you want to close this application ?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
-                    }
-                })
-                .setNeutralButton("Cancel",  new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(amtString) ) {
+            builder = new AlertDialog.Builder(this);
+            builder.setTitle("Alert");
+            builder.setMessage("You have made some changes. \n Do you want to save the changes before exiting?");
 
-        //Creating dialog box
-        AlertDialog alert = builder.create();
-        alert.setCancelable(false);
-        alert.setCanceledOnTouchOutside(false);
-        alert.show();
+            //Setting message manually and performing action on button click
+            builder.setMessage("Do you want to close this application ?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+                        }
+                    })
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
 
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            alert.setCancelable(false);
+            alert.setCanceledOnTouchOutside(false);
+            alert.show();
+        } else {
+            finish();
+            overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+        }
     }
 
 }

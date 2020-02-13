@@ -42,8 +42,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     @BindView(R.id.calendarView)
     MaterialCalendarView calenderView;
 
-    @BindView(R.id.dateTextView)
-    TextView dateTextView;
+
 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
@@ -54,7 +53,6 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     int monthlyTotal = 0;
 
     DbHelper dbhelper;
-    ArrayList<MyListData> myListData = new ArrayList<MyListData>();
 
 
     @Override
@@ -178,8 +176,6 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
                     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                         final String text = String.valueOf(date.getDate());
                         selectedDate = text;
-                        String tempDate = formatDate(text);
-                        dateTextView.setText(tempDate);
                     }
                 });
 
@@ -202,7 +198,6 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     @OnClick(R.id.nxt_btn)
     public void nextButton(){
        // Log.e("mm", selectedDate + " " + formatDate(selectedDate));
-        dateTextView.setText(formatDate(selectedDate));
         Intent i = new Intent(this, DailyExpensesActivity.class);
         i.putExtra("uidate", "" + formatDate(selectedDate));
         i.putExtra("date", "" + selectedDate);
@@ -214,19 +209,10 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     private void getMonthlyData() {
 
         //reset defaults
-        myListData.clear();
         monthlyTotal = 0;
 
-        myListData.addAll( dbhelper.getAllMonthCashHistory(monthOfDay));
-
-        String t1;
-        for(MyListData item : myListData) {
-
-            t1 = item.getAmt();
-            monthlyTotal += Integer.parseInt(t1);
-        }
-
-
+        //fetch total from db
+        monthlyTotal = dbhelper.getAllMonthCashHistoryTotal(monthOfDay);
 
         // updates value in toolbar
         invalidateOptionsMenu();

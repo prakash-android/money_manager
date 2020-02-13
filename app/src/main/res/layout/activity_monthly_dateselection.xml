@@ -79,29 +79,8 @@
         android:layout_marginTop="24dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Choose The Date"
-            android:textColor="#0C0C0C"
-            android:textSize="16sp"
-            android:textStyle="bold" />
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/calenderLayout"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:background="@drawable/bg_calen">-->
 
-<!--            <CalendarView-->
-<!--                android:id="@+id/calendarView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content" />-->
-<!--        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/calenderLayout"

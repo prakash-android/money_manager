@@ -135,8 +135,67 @@ public class DbHelper extends SQLiteOpenHelper {
 
         //close db connection
         db.close();
-        Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
         return cashHistoryArrayList;
+    }
+
+    /**
+     * get sum of amount in date, calculate total
+     * @param sDate
+     * @return total
+     */
+    public int getAllDateCashHistoryTotal(String sDate){
+        ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
+
+        String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE "+ COLUMN_DATE + " = " + '"'+ sDate +'"' + ";" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        int id;
+        String name;
+        String amt;
+        int total = 0;
+        int rowCount;
+        try{
+            cursor =  db.rawQuery( selectQuery , null );
+            if (cursor != null){
+                rowCount = cursor.getCount();
+                try{
+                    if (cursor.moveToNext()) {
+
+                        while (!cursor.isAfterLast()) {
+                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
+                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            total += Integer.parseInt(amt);
+
+                            MyListData t = new MyListData(id, name, amt);
+
+                            cashHistoryArrayList.add(t);
+                            cursor.moveToNext();
+                        }
+                    } else {
+                        //query result was empty, handle here
+                        Log.e("mm", "rows returned " + rowCount );
+                    }
+
+                } finally {
+                    //close cursor here
+                    cursor.close();
+                }
+            }
+
+        }catch (SQLiteException e){
+            //handles all sqlite exceptions & returns empty arrayList
+            Log.e("mm", e.getMessage());
+            return total;
+        }
+
+
+        //close db connection
+        db.close();
+        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        return total;
     }
 
 
@@ -196,9 +255,72 @@ public class DbHelper extends SQLiteOpenHelper {
 
         //close db connection
         db.close();
-        Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
         return cashHistoryArrayList;
     }
+
+
+    /**
+     * get month total here
+     * @param sMonth
+     * @return int (total)
+     */
+    public int getAllMonthCashHistoryTotal(String sMonth){
+        ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
+
+        String selectQuery = "SELECT * FROM "+ MONEY_TABLE + " WHERE strftime( '%Y-%m', "+ COLUMN_DATE + " ) = " + '"'+ sMonth +'"' + ";" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        int id;
+        String name;
+        String amt;
+        int total = 0;
+        int rowCount;
+        try{
+            cursor =  db.rawQuery( selectQuery , null );
+            if (cursor != null){
+                rowCount = cursor.getCount();
+                try{
+                    if (cursor.moveToNext()) {
+
+                        while (!cursor.isAfterLast()) {
+                            id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                            name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
+                            amt = cursor.getString(cursor.getColumnIndex(COLUMN_AMOUNT));
+                            total += Integer.parseInt(amt);
+
+                            MyListData t = new MyListData(id, name, amt);
+
+                            cashHistoryArrayList.add(t);
+                            cursor.moveToNext();
+                        }
+                    } else {
+                        //query result was empty, handle here
+                        Log.e("mm", "rows returned " + rowCount );
+                        Log.e("mm", selectQuery);
+                    }
+
+                } finally {
+                    //close cursor here
+                    cursor.close();
+                }
+            }
+
+        }catch (SQLiteException e){
+            //handles all sqlite exceptions & returns empty arrayList
+            Log.e("mm", e.getMessage());
+            Log.e("mm", selectQuery);
+            return total;
+        }
+
+
+        //close db connection
+        db.close();
+        //Log.e("mm", "rows returned (arrayList size) " + cashHistoryArrayList.size() );
+        return total;
+    }
+
 
     /**
      * delete particular row with id from table

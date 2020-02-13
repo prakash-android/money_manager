@@ -118,12 +118,7 @@ public class DailyExpensesActivity extends AppCompatActivity {
         //get values n calculate dailyTotal
         myListData.addAll( dbhelper.getAllDateCashHistory(dateString));
 
-        String t1;
-        for(MyListData item : myListData) {
-
-            t1 = item.getAmt();
-            dailyTotal += Integer.parseInt(t1);
-        }
+       dailyTotal = dbhelper.getAllDateCashHistoryTotal(dateString);
 
         updateDailyTotal();
     }

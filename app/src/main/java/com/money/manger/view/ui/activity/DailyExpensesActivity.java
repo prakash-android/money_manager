@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.money.manger.R;
 import com.money.manger.model.MyListData;
@@ -40,6 +41,9 @@ public class DailyExpensesActivity extends AppCompatActivity {
     @BindView(R.id.add_btn)
     Button addButton;
 
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     String dateString = "";
     String uiDateString = "";
     int dailyTotal = 0;
@@ -53,13 +57,13 @@ public class DailyExpensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_expenses);
         ButterKnife.bind(this);
+        dbhelper = new DbHelper(this);
 
         setToolbar();
         Intent intent = getIntent();
         getIntentValues(intent);
+        setListeners();
 
-        dbhelper = new DbHelper(this);
-//        displayListValues();
     }
 
 
@@ -95,7 +99,21 @@ public class DailyExpensesActivity extends AppCompatActivity {
 
 
 
-        public void displayListValues() {
+    public void setListeners() {
+
+        //swipe to refresh
+        swipeRefreshLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                displayListValues();
+
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+
+    public void displayListValues() {
 
         getData();
 

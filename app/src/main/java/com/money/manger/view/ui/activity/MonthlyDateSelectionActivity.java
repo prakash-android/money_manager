@@ -187,7 +187,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
                 final String text = String.valueOf(date.getDate());
                 selectedMonth = formatMonth(text);
                 monthOfDay = formatMonthYear(text);
-                Log.e("mm" , monthOfDay );
+                //Log.e("mm" , monthOfDay );
                 toolbar.setTitle(selectedMonth);
                 getMonthlyData();
             }

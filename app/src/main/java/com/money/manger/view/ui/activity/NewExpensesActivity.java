@@ -34,11 +34,8 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
-import pl.aprilapps.easyphotopicker.MediaFile;
-import pl.aprilapps.easyphotopicker.MediaSource;
 
 
 public class NewExpensesActivity extends AppCompatActivity {
@@ -58,7 +55,6 @@ public class NewExpensesActivity extends AppCompatActivity {
     @BindView(R.id.itemImageView)
     ImageView itemImageView;
 
-    EasyImage easyImage;
 
     String dateString;
 
@@ -103,16 +99,11 @@ public class NewExpensesActivity extends AppCompatActivity {
 
 
 
-    @OnClick(R.id.itemImageView)
+    @OnClick(R.id.item_image_layout)
     public void addImage() {
         if (checkPermission()) {
             if (checkCameraPermission()) {
-                easyImage = new EasyImage.Builder(NewExpensesActivity.this)
-                        .setChooserTitle("Pick media")
-                        .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-                        .allowMultiple(false)
-                        .build();
-                easyImage.openChooser(this);
+                EasyImage.openChooserWithGallery(NewExpensesActivity.this, "Select the image", 0);
 
             } else {
                 if (PreferenceAppHelper.getCameraPermission() == "0") {
@@ -138,34 +129,25 @@ public class NewExpensesActivity extends AppCompatActivity {
 
     // easyImage result action
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
             @Override
-            public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
                 //Some error handling
-                error.printStackTrace();
             }
 
             @Override
-            public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
+            public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
-                newItemImage = imageFiles[0].getFile();
-
-
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFiles[0].getFile().getAbsolutePath());
-
-                Glide.with(NewExpensesActivity.this).load(bitmap)
-                        .placeholder(R.drawable.ic_add_image).error(R.drawable.ic_add_image)
-                        .into(itemImageView);
-
-
+                newItemImage = imageFile;
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                Glide.with(NewExpensesActivity.this).load(bitmap).into(itemImageView);
             }
 
         });
-
     }
 
 

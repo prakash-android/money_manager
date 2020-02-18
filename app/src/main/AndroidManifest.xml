@@ -5,13 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MMApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".view.ui.activity.MonthlyDateSelectionActivity"
+        <activity android:name=".view.ui.activity.LoginActivity"
             android:theme="@style/FullscreenTheme"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
@@ -21,6 +22,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.ui.activity.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:label="User Profile"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
+        <activity android:name=".view.ui.activity.MonthlyDateSelectionActivity"
+            android:theme="@style/FullscreenTheme"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+
         </activity>
         <activity android:name=".view.ui.activity.DailyExpensesActivity"
             android:screenOrientation="portrait"

@@ -50,5 +50,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 
+    // Sign in with Gmail
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //Circular ImageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
 
 }

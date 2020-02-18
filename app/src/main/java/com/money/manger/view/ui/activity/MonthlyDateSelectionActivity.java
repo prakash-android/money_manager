@@ -123,22 +123,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.user_profile:
-
-                Intent i = new Intent(this, ProfileActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
-                break;
-            case R.id.log_out:
-
-                showLogoutDialog();
-                break;
-        }
-
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        //displayView(item.getItemId());
+        displayView(item.getItemId());
         return true;
     }
 

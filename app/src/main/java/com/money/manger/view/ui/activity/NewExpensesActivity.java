@@ -1,20 +1,44 @@
 package com.money.manger.view.ui.activity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
+import com.money.manger.MMApplication;
 import com.money.manger.R;
 import com.money.manger.view.database.DbHelper;
+import com.money.manger.view.utils.PreferenceAppHelper;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.aprilapps.easyphotopicker.ChooserType;
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+import pl.aprilapps.easyphotopicker.MediaFile;
+import pl.aprilapps.easyphotopicker.MediaSource;
 
 
 public class NewExpensesActivity extends AppCompatActivity {
@@ -31,9 +55,27 @@ public class NewExpensesActivity extends AppCompatActivity {
     @BindView(R.id.amt_layout)
     TextInputLayout amtLayout;
 
+    @BindView(R.id.itemImageView)
+    ImageView itemImageView;
+
+    EasyImage easyImage;
+
     String dateString;
 
     DbHelper dbhelper;
+
+    private String[] permission_storage =
+            {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private int PERMISSION_REQUEST_CODE = 103;
+
+
+    private String[] permission_camera =
+            {Manifest.permission.CAMERA};
+    private int CAMERA_PERMISSION_REQUEST_CODE = 104;
+
+    private File newItemImage = null;
+
+
 
 
 
@@ -61,6 +103,209 @@ public class NewExpensesActivity extends AppCompatActivity {
 
 
 
+    @OnClick(R.id.itemImageView)
+    public void addImage() {
+        if (checkPermission()) {
+            if (checkCameraPermission()) {
+                easyImage = new EasyImage.Builder(NewExpensesActivity.this)
+                        .setChooserTitle("Pick media")
+                        .setChooserType(ChooserType.CAMERA_AND_GALLERY)
+                        .allowMultiple(false)
+                        .build();
+                easyImage.openChooser(this);
+
+            } else {
+                if (PreferenceAppHelper.getCameraPermission() == "0") {
+
+                    requestCameraPermission();
+                } else {
+                    showCameraPermissionDialog();
+                }
+            }
+
+
+        } else {
+            if (PreferenceAppHelper.getStoragePermission() == "0") {
+
+                requestStoragePermission();
+            } else {
+                showStoragePermissionDialog();
+            }
+
+        }
+    }
+
+
+    // easyImage result action
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        easyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
+            @Override
+            public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
+                //Some error handling
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
+
+                newItemImage = imageFiles[0].getFile();
+
+
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFiles[0].getFile().getAbsolutePath());
+
+                Glide.with(NewExpensesActivity.this).load(bitmap)
+                        .placeholder(R.drawable.ic_add_image).error(R.drawable.ic_add_image)
+                        .into(itemImageView);
+
+
+            }
+
+        });
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //  openDocumentPicker()
+                } else if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(
+                        permissions[0]
+                )
+                ) {
+
+                    Log.e("Never", "Go to Settings and Grant the permission to use this feature.");
+
+                    PreferenceAppHelper.setStoragePermission("1");
+
+                    // User selected the Never Ask Again Option
+                } else {
+
+                    PreferenceAppHelper.setStoragePermission("1");
+                    Log.e("Denied", "Permission Denied");
+                }
+            }
+        }
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //  openDocumentPicker()
+                } else if (Build.VERSION.SDK_INT >= 23 && !shouldShowRequestPermissionRationale(
+                        permissions[0]
+                )
+                ) {
+
+                    Log.e("Never", "Go to Settings and Grant the permission to use this feature.");
+
+                    PreferenceAppHelper.setCameraPermission("1");
+
+                    // User selected the Never Ask Again Option
+                } else {
+
+                    PreferenceAppHelper.setCameraPermission("1");
+                    Log.e("Denied", "Permission Denied");
+                }
+            }
+        }
+
+
+    }
+
+
+    void showStoragePermissionDialog() {
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo).setTitle("Alert");
+        builder.setMessage("We need to access your storage to use this feature. Do you want to allow permission now?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+            dialog.dismiss();
+        }
+        });
+        builder.setNegativeButton("Close", null);
+        //builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show(); //Only after .show() was called
+        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(getResources().getColor(R.color.colorPrimary));
+
+    }
+
+
+    void showCameraPermissionDialog() {
+
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo).setTitle("Alert");
+        builder.setMessage("We need to access your Camera to use this feature. Do you want to allow permission now?");
+        builder.setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Close", null);
+        //builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show(); //Only after .show() was called
+        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(getResources().getColor(R.color.colorPrimary));
+
+    }
+
+    private Boolean checkPermission() {
+        final int result = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        );
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    private Boolean checkCameraPermission(){
+        final int result = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(
+                this,
+        permission_storage,
+                PERMISSION_REQUEST_CODE
+        );
+    }
+
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+                this,
+        permission_camera,
+                CAMERA_PERMISSION_REQUEST_CODE
+        );
+    }
 
 
 

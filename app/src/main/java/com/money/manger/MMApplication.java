@@ -24,4 +24,8 @@ public class MMApplication extends Application {
     public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
     }
+
+    public static Context getContext() {
+        return context;
+    }
 }

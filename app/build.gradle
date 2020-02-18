@@ -60,5 +60,8 @@ dependencies {
     //Circular ImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    //easyImage
+    implementation 'com.github.jkwiecien:EasyImage:3.0.3'
+
 
 }

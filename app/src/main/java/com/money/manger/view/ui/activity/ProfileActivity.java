@@ -84,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
 
     @Override
     public void onBackPressed() {
-
+        finish();
     }
 
 }

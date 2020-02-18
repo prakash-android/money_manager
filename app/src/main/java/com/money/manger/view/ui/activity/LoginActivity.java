@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         PreferenceAppHelper.setUserEmail("" + email);
         PreferenceAppHelper.setUserImage("" + photoUrl);
 
-        Intent i = new Intent(this, ProfileActivity.class);
+        Intent i = new Intent(this, MonthlyDateSelectionActivity.class);
         startActivity(i);
 
 

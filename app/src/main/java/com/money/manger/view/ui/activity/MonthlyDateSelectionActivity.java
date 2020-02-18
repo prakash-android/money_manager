@@ -55,6 +55,9 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
 
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
     String selectedDate = "";
     String selectedMonth = "";
     String monthOfDay = "";
@@ -114,9 +117,28 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
         }
     }
 
+    private void setNavigationViewListener() {
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        displayView(item.getItemId());
+        switch (item.getItemId()) {
+
+            case R.id.user_profile:
+
+                Intent i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
+                break;
+            case R.id.log_out:
+
+                showLogoutDialog();
+                break;
+        }
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        //displayView(item.getItemId());
         return true;
     }
 
@@ -127,6 +149,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
 
                 Intent i = new Intent(this, ProfileActivity.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
                 break;
             case R.id.log_out:
 
@@ -205,6 +228,10 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
 
 
     public void setupListeners(){
+
+        //nav listener
+        setNavigationViewListener();
+
         // Get Current Date as default
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);

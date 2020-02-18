@@ -17,6 +17,8 @@ public class PreferenceAppHelper {
     private static final String STORAGE_PERMISSION = "storage_permission";
     private static final String CAMERA_PERMISSION = "camera_permission";
 
+    private static final String LOGINED_USER = "logined_user";
+
 
     private static SharedPreferences mSharedPreferences = null;
 
@@ -33,6 +35,14 @@ public class PreferenceAppHelper {
 
     public static String getCameraPermission() {
         return mSharedPreferences.getString(CAMERA_PERMISSION, "0");
+    }
+
+    public static void setLoginedUser(boolean loginedUser) {
+        setBooleanInPrefs(LOGINED_USER, loginedUser);
+    }
+
+    public static Boolean getLoginedUser() {
+        return getSharedPreference().getBoolean(LOGINED_USER, false);
     }
 
     public static String getUserId() {

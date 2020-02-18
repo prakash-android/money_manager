@@ -1,11 +1,14 @@
 package com.money.manger.view.ui.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -73,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
 
     @OnClick(R.id.log_out)
     public void logoutButton() {
-
+        showLogoutDialog();
     }
 
 
@@ -82,9 +85,46 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+        return true;
+    }
+
+
     @Override
     public void onBackPressed() {
         finish();
+        overridePendingTransition(R.anim.back_left_to_right, R.anim.back_right_to_left);
+    }
+
+    public void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo).setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                PreferenceAppHelper.setLoginedUser(false);
+                PreferenceAppHelper.setUserName("null");
+                PreferenceAppHelper.setUserEmail("null");
+                PreferenceAppHelper.setUserImage("null");
+                Intent loginIntent = new Intent(ProfileActivity.this, LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(loginIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+
+        });
+        builder.setNegativeButton("No", null);
+        //builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show(); //Only after .show() was called
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
     }
 
 }

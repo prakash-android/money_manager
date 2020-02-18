@@ -1,11 +1,13 @@
 package com.money.manger.view.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
@@ -46,9 +48,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         ButterKnife.bind(this);
        // dbhelper = new DbHelper(this);
 
+        if(PreferenceAppHelper.getLoginedUser()){
+            verifySuccess();
+        } else {
+            //do nothing
+        }
+
         settingUpGoogleSignIn();
     }
 
+
+    private void verifySuccess() {
+        Intent intent = new Intent(LoginActivity.this, MonthlyDateSelectionActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
+    }
 
 
     @OnClick(R.id.google_sign_in_button)
@@ -56,7 +70,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
 
 
     @Override
@@ -114,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         PreferenceAppHelper.setUserName("" + displayName);
         PreferenceAppHelper.setUserEmail("" + email);
         PreferenceAppHelper.setUserImage("" + photoUrl);
+        PreferenceAppHelper.setLoginedUser(true);
 
         Intent i = new Intent(this, MonthlyDateSelectionActivity.class);
         startActivity(i);
@@ -146,7 +160,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo).setTitle("Exit");
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
 
+        });
+        builder.setNegativeButton("No", null);
+        //builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show(); //Only after .show() was called
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
     }
 
 

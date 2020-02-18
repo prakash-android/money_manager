@@ -17,9 +17,11 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.money.manger.R;
 import com.money.manger.model.MyListData;
 import com.money.manger.view.database.DbHelper;
+import com.money.manger.view.utils.PreferenceAppHelper;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
@@ -37,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MonthlyDateSelectionActivity extends AppCompatActivity {
+public class MonthlyDateSelectionActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -112,19 +114,28 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         }
     }
 
-//    @OnClick(R.id.user_profile)
-//    public void navUserProfile() {
-//        mDrawerLayout.closeDrawer(GravityCompat.START);
-//        Intent intent = new Intent(MonthlyDateSelectionActivity.this, ProfileActivity.class);
-//        startActivity(intent);
-//        overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
-//    }
-//
-//    @OnClick(R.id.logout)
-//    public void navLogOut() {
-//
-//    }
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        displayView(item.getItemId());
+        return true;
+    }
 
+    private void displayView(int itemId) {
+        switch (itemId) {
+
+            case R.id.user_profile:
+
+                Intent i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
+                break;
+            case R.id.log_out:
+
+                showLogoutDialog();
+                break;
+        }
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
 
 
     /**
@@ -292,6 +303,34 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         }
 
     }
+
+    public void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo).setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                PreferenceAppHelper.setLoginedUser(false);
+                PreferenceAppHelper.setUserName("null");
+                PreferenceAppHelper.setUserEmail("null");
+                PreferenceAppHelper.setUserImage("null");
+                Intent loginIntent = new Intent(MonthlyDateSelectionActivity.this, LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(loginIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+
+        });
+        builder.setNegativeButton("No", null);
+        //builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show(); //Only after .show() was called
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+    }
+
 }
 
 

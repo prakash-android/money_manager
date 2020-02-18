@@ -151,7 +151,7 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity  implements 
                 startActivity(i);
                 overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
                 break;
-            case R.id.log_out:
+            case R.id.logout:
 
                 showLogoutDialog();
                 break;

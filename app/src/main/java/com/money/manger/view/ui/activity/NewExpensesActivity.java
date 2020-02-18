@@ -103,7 +103,7 @@ public class NewExpensesActivity extends AppCompatActivity {
 
 
 
-    @OnClick(R.id.item_image_layout)
+    @OnClick(R.id.itemImageView)
     public void addImage() {
         if (checkPermission()) {
             if (checkCameraPermission()) {

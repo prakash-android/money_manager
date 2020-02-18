@@ -8,61 +8,19 @@
     android:background="#F3F3F3"
     tools:context=".view.ui.activity.MonthlyDateSelectionActivity">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:background="@android:color/white"-->
-<!--        android:elevation="4dp"-->
-<!--        android:theme="@style/ThemeOverlay.MyApp.ActionBar"-->
-<!--        tools:targetApi="lollipop">-->
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true">
 
-<!--            <TextView-->
-<!--                android:id="@+id/toolbarMonth"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_marginStart="2dp"-->
-<!--                android:text="month"-->
-<!--                android:textAllCaps="true"-->
-<!--                android:textColor="@color/colorPrimary"-->
-<!--                android:textSize="20sp"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <RelativeLayout-->
-<!--                android:id="@+id/notification_layout"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:foreground="?attr/selectableItemBackground"-->
-<!--                android:paddingStart="8dp"-->
-<!--                android:paddingEnd="16dp">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/toolbarCash"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:layout_marginEnd="0dp"-->
-<!--                    android:text="cash"-->
-<!--                    android:textAllCaps="true"-->
-<!--                    android:textColor="@color/colorPrimary"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold" />-->
-
-
-<!--            </RelativeLayout>-->
-
-<!--        </RelativeLayout>-->
-
-<!--    </androidx.appcompat.widget.Toolbar>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -70,7 +28,8 @@
         android:theme="@style/ThemeOverlay.MyApp.ActionBar"
         android:background="@color/colorPrimary"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        tools:targetApi="lollipop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,5 +78,22 @@
         android:textStyle="bold"
         android:textColor="#ffffff" />
 
+        </RelativeLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/navigation_menu">
+
+        </com.google.android.material.navigation.NavigationView>
+
+
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </RelativeLayout>

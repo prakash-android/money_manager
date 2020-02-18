@@ -1,9 +1,14 @@
 package com.money.manger.view.ui.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +47,8 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     @BindView(R.id.calendarView)
     MaterialCalendarView calenderView;
 
-
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
@@ -80,6 +86,12 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     private void setToolbar() {
         toolbar.setTitle("title here");
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
     }
 
     @Override
@@ -87,6 +99,32 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
         amtMenu.setTitle(String.valueOf(monthlyTotal));
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+//    @OnClick(R.id.user_profile)
+//    public void navUserProfile() {
+//        mDrawerLayout.closeDrawer(GravityCompat.START);
+//        Intent intent = new Intent(MonthlyDateSelectionActivity.this, ProfileActivity.class);
+//        startActivity(intent);
+//        overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
+//    }
+//
+//    @OnClick(R.id.logout)
+//    public void navLogOut() {
+//
+//    }
+
 
 
     /**
@@ -223,6 +261,36 @@ public class MonthlyDateSelectionActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getMonthlyData();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.logo).setTitle("Exit");
+            builder.setMessage("Are you sure you want to Exit?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finishAffinity();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+
+            });
+            builder.setNegativeButton("No", null);
+            //builder.show();
+            AlertDialog dialog = builder.create();
+            dialog.show(); //Only after .show() was called
+            dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+            dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorThemeOrange));
+
+
+        }
+
     }
 }
 

@@ -116,6 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * isAfterLast() - @boolean checks if cursor is at last row in result
      * exceptions handled - invalid query, empty result returned, other sqlite basic exceptions
      * closing cursor and db connection at last - to avoid other errors
+     * getCount() is removed, ite expensive operation in db (row counting by cursor)
      */
     public ArrayList<MyListData> getAllDateCashHistory(String sDate){
         ArrayList<MyListData> cashHistoryArrayList = new ArrayList<MyListData>();
@@ -129,11 +130,9 @@ public class DbHelper extends SQLiteOpenHelper {
         int amt;
         String date;
         byte[] img;
-        int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
             if (cursor != null){
-                    rowCount = cursor.getCount();
                 try{
                     if (cursor.moveToNext()) {
 
@@ -148,11 +147,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
-                            Log.e("mm", "rows returned " + rowCount );
                         }
                     } else {
                         //query result was empty, handle here
-                        Log.e("mm", "rows returned " + rowCount );
+                        Log.e("mm", selectQuery);
                     }
 
                 } finally {
@@ -180,6 +178,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * use cursor to get value
      *** SUM(AMT) As TOTAL - its used to get returned columnIndex
      *** SUM() - adds values in field  ( integer, text, varchar )
+     * getCount removed , its expensive n no longer needed
      * ---------------------------------------------------------------
      * @param sDate
      * @return total
@@ -191,18 +190,18 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Cursor cursor = null;
         int totalAmt = 0;
-        int rowCount;
+       // int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
             if (cursor != null){
-                rowCount = cursor.getCount();
+               // rowCount = cursor.getCount();
                 try{
                     if (cursor.moveToFirst()) {
 
                         totalAmt = cursor.getInt(cursor.getColumnIndex("Total"));
                     } else {
                         //query result was empty, handle here
-                        Log.e("mm", "rows returned " + rowCount );
+                      //  Log.e("mm", "rows returned " + rowCount );
                     }
 
                 } finally {

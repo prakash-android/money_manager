@@ -61,7 +61,10 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         final MyListData myListData = listdata.get(position);
         holder.textViewItem.setText(listdata.get(position).getItem());
         holder.textViewAmt.setText(String.valueOf(listdata.get(position).getAmt()));
-        holder.itemImageView.setImageBitmap(Utils.getImage(listdata.get(position).getImg()));
+        //if list has no image, it shows default image
+        if(listdata.get(position).getImg() != null){
+            holder.itemImageView.setImageBitmap(Utils.getImage(listdata.get(position).getImg()));
+        }
 
 
 

@@ -14,8 +14,6 @@ import com.money.manger.model.MyListData;
 
 import java.util.ArrayList;
 
-import javax.crypto.AEADBadTagException;
-
 public class DbHelper extends SQLiteOpenHelper {
 
 
@@ -27,6 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ITEM_NAME = "ITEM_NAME";
     public static final String COLUMN_AMOUNT = "AMOUNT";
     public static final String COLUMN_DATE = "DATE";
+    public static final String COLUMN_IMAGE = "IMAGE";
 
     public DbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TABLE " + MONEY_TABLE +
-                        "(" + COLUMN_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COLUMN_ITEM_NAME + " text," +  COLUMN_AMOUNT + " integer," +  COLUMN_DATE + " date)"
+                        "(" + COLUMN_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +  COLUMN_ITEM_NAME + " text," +  COLUMN_AMOUNT + " integer," +  COLUMN_DATE + " date," + COLUMN_IMAGE + " BLOB)"
         );
 
     }
@@ -53,14 +52,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     /**
-     * @param name , @param amt, @param date
+     * @param name , amt, date, image (byteArray saved as blob in db)
      * @return boolean
      * -----------------------------------------
      * insert new row in table
      * insertOrThrow method returns value of result (-1 on failure)
      * else use insert method n validate result returned
      */
-    public boolean addCashHistory (String name, int amt, String date) {
+    public boolean addCashHistory (String name, int amt, String date, byte[] imageBytes) {
         boolean s;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -68,6 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_NAME , name);
         contentValues.put(COLUMN_AMOUNT , amt);
         contentValues.put(COLUMN_DATE , date);
+        contentValues.put(COLUMN_IMAGE , imageBytes);
 
         // insert row (insertOrThrow method)
         long success = db.insert(MONEY_TABLE , null, contentValues);
@@ -128,6 +128,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String name;
         int amt;
         String date;
+        byte[] img;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
@@ -141,11 +142,13 @@ public class DbHelper extends SQLiteOpenHelper {
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getInt(cursor.getColumnIndex(COLUMN_AMOUNT));
                             date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+                            img = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE));
 
-                            MyListData t = new MyListData(id, name, amt, date);
+                            MyListData t = new MyListData(id, name, amt, date, img);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();
+                            Log.e("mm", "rows returned " + rowCount );
                         }
                     } else {
                         //query result was empty, handle here
@@ -240,6 +243,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String name;
         int amt;
         String date;
+        byte[] img;
         int rowCount;
         try{
             cursor =  db.rawQuery( selectQuery , null );
@@ -253,8 +257,9 @@ public class DbHelper extends SQLiteOpenHelper {
                             name = cursor.getString(cursor.getColumnIndex(COLUMN_ITEM_NAME));
                             amt = cursor.getInt(cursor.getColumnIndex(COLUMN_AMOUNT));
                             date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+                            img = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE));
 
-                            MyListData t = new MyListData(id, name, amt, date);
+                            MyListData t = new MyListData(id, name, amt, date, img);
 
                             cashHistoryArrayList.add(t);
                             cursor.moveToNext();

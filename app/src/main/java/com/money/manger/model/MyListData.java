@@ -5,12 +5,14 @@ public class MyListData{
     private int amt;
     private String date;
     private int id;
+    private byte[] img;
 
-    public MyListData(int id, String item_name, int amt, String date) {
+    public MyListData(int id, String item_name, int amt, String date, byte[] img) {
         this.item_name = item_name;
         this.amt = amt;
         this.id = id;
         this.date = date;
+        this.img = img;
     }
 
     public int getId() {
@@ -18,6 +20,13 @@ public class MyListData{
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+    public void setId(byte[] img) {
+        this.img = img;
     }
 
     public String getItem() {

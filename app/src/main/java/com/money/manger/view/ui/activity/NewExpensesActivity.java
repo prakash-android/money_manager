@@ -28,8 +28,11 @@ import com.money.manger.MMApplication;
 import com.money.manger.R;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.utils.PreferenceAppHelper;
+import com.money.manger.view.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +73,7 @@ public class NewExpensesActivity extends AppCompatActivity {
     private int CAMERA_PERMISSION_REQUEST_CODE = 104;
 
     private File newItemImage = null;
+    byte[] inputData;
 
 
 
@@ -145,6 +149,8 @@ public class NewExpensesActivity extends AppCompatActivity {
                 newItemImage = imageFile;
                 Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 Glide.with(NewExpensesActivity.this).load(bitmap).into(itemImageView);
+
+                inputData = Utils.getBitmapAsByteArray(bitmap);
             }
 
         });
@@ -314,7 +320,7 @@ public class NewExpensesActivity extends AppCompatActivity {
 
     public void addNewRow(){
         boolean queryResult = false;
-        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString );
+        queryResult = dbhelper.addCashHistory(""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString , inputData);
 
         if(queryResult) {
             Toast.makeText(this, "expenses added",Toast.LENGTH_LONG).show();

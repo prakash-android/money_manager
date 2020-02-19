@@ -22,6 +22,7 @@ import com.money.manger.R;
 import com.money.manger.model.MyListData;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.ui.activity.EditExpensesActivity;
+import com.money.manger.view.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         final MyListData myListData = listdata.get(position);
         holder.textViewItem.setText(listdata.get(position).getItem());
         holder.textViewAmt.setText(String.valueOf(listdata.get(position).getAmt()));
+        holder.itemImageView.setImageBitmap(Utils.getImage(listdata.get(position).getImg()));
 
 
 
@@ -149,11 +151,13 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         public TextView textViewItem;
         public TextView textViewAmt;
         public ImageView overflowImageView;
+        public ImageView itemImageView;
         public ViewHolder(View itemView) {
             super(itemView);
             this.textViewItem = (TextView) itemView.findViewById(R.id.textViewItem);
             this.textViewAmt = (TextView) itemView.findViewById(R.id.textViewAmount);
             this.overflowImageView = (ImageView) itemView.findViewById(R.id.overflow_image);
+            this.itemImageView = (ImageView) itemView.findViewById(R.id.item_imageView);
         }
     }
 }

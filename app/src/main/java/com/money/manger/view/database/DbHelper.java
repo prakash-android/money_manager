@@ -3,6 +3,7 @@ package com.money.manger.view.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -162,6 +163,10 @@ public class DbHelper extends SQLiteOpenHelper {
         }catch (SQLiteException e){
             //handles all sqlite exceptions & returns empty arrayList
             Log.e("mm", e.getMessage());
+            return cashHistoryArrayList;
+
+        }catch (CursorIndexOutOfBoundsException cIOB){
+            Log.e("mm Exp", cIOB.getLocalizedMessage());
             return cashHistoryArrayList;
         }
 

@@ -1,7 +1,6 @@
 package com.money.manger.view.ui.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -24,15 +22,12 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
-import com.money.manger.MMApplication;
 import com.money.manger.R;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.utils.PreferenceAppHelper;
 import com.money.manger.view.utils.Utils;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

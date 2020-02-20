@@ -63,6 +63,44 @@ public class Utils {
     }
 
 
+    public static File convertCustomImageSize(Bitmap image, int maxSize, String imageSavedFileName) {
+
+        File fileOut = null;
+
+
+        float width = image.getWidth();
+        float height = image.getHeight();
+
+        float bitmapRatio = width / height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (height * bitmapRatio);
+        }
+
+        Bitmap cBitmap = Bitmap.createScaledBitmap(image, Math.round(width), Math.round(height), true);
+
+        try {
+            String file_path =
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/mm";
+            File dir = new File(file_path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            fileOut = new File(dir, "" + imageSavedFileName + "" + ".png");
+            FileOutputStream fOut = new FileOutputStream(fileOut);
+            cBitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+
+        } catch (Exception e) {
+            Log.e("Exceptione", "" + e.getMessage());
+        }
+        return fileOut;
+    }
+
 
     public static byte[] getImageBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

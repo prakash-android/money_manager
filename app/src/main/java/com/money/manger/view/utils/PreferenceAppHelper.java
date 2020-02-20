@@ -19,6 +19,8 @@ public class PreferenceAppHelper {
 
     private static final String LOGINED_USER = "logined_user";
 
+    private static final String FCM_TOKEN = "fcm_token";
+
 
     private static SharedPreferences mSharedPreferences = null;
 
@@ -35,6 +37,14 @@ public class PreferenceAppHelper {
 
     public static String getCameraPermission() {
         return mSharedPreferences.getString(CAMERA_PERMISSION, "0");
+    }
+
+    public static String getFcmToken() {
+        return getSharedPreference().getString(FCM_TOKEN, "null");
+    }
+
+    public static void setFcmToken(String fcmToken) {
+        setStringInPrefs(FCM_TOKEN, fcmToken);
     }
 
     public static void setLoginedUser(boolean loginedUser) {

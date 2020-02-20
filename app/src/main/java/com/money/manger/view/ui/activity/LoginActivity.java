@@ -26,7 +26,8 @@ import com.google.android.gms.tasks.Task;
 import com.money.manger.R;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.utils.PreferenceAppHelper;
-
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

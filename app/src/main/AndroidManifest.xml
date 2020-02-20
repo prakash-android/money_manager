@@ -31,6 +31,21 @@
             android:windowSoftInputMode="adjustResize">
 
         </activity>
+
+        <!-- this is not used in recent versions of firebase
+    <service android:name=".service.MyFirebaseMessagingService">
+        <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+        </intent-filter>
+    </service>
+    -->
+
+        <service android:name=".view.service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".view.ui.activity.MonthlyDateSelectionActivity"
             android:theme="@style/FullscreenTheme"
             android:screenOrientation="portrait"

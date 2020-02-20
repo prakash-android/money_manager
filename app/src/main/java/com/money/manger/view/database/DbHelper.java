@@ -162,11 +162,12 @@ public class DbHelper extends SQLiteOpenHelper {
 
         }catch (SQLiteException e){
             //handles all sqlite exceptions & returns empty arrayList
-            Log.e("mm", e.getMessage());
+            Log.e("mm Exception", e.getMessage());
             return cashHistoryArrayList;
 
         }catch (CursorIndexOutOfBoundsException cIOB){
-            Log.e("mm Exp", cIOB.getLocalizedMessage());
+            //handles cursor index exceptions & returns empty arrayList
+            Log.e("mm Exception", cIOB.getLocalizedMessage());
             return cashHistoryArrayList;
         }
 

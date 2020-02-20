@@ -35,6 +35,8 @@ import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
+import static com.money.manger.view.utils.Utils.convertCustomFileSize;
+
 
 public class NewExpensesActivity extends AppCompatActivity {
 
@@ -141,8 +143,9 @@ public class NewExpensesActivity extends AppCompatActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
-                newItemImage = imageFile;
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                //convert file on pick
+                newItemImage =  convertCustomFileSize(imageFile, 1024, imageFile.getName());
+                Bitmap bitmap = BitmapFactory.decodeFile(newItemImage.getAbsolutePath());
                 Glide.with(NewExpensesActivity.this).load(bitmap).into(itemImageView);
 
                 inputData = Utils.getBitmapAsByteArray(bitmap);

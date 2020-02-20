@@ -22,13 +22,6 @@ public class MyListData{
         this.id = id;
     }
 
-    public byte[] getImg() {
-        return img;
-    }
-    public void setId(byte[] img) {
-        this.img = img;
-    }
-
     public String getItem() {
         return item_name;
     }
@@ -48,5 +41,12 @@ public class MyListData{
     }
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+    public void setId(byte[] img) {
+        this.img = img;
     }
 }

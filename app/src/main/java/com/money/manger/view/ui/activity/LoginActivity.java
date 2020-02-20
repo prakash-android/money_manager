@@ -61,18 +61,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     LoginButton fbButton;
 
     @BindView(R.id.linear_layout)
-    LinearLayout coordinatorLayout;
+    LinearLayout linearLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //fb sdk intitalize before inflate view
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+
+        //fb sdk for logging
+       // FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-       // dbhelper = new DbHelper(this);
 
         if(PreferenceAppHelper.getLoginedUser()){
             verifySuccess();
@@ -94,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void settingUpFaceBookSignIn() {
         callbackManager = CallbackManager.Factory.create();
         fbButton.setReadPermissions(Arrays.asList(EMAIL));
+        //fbButton.setReadPermissions("email", "public_profile", "user_friends");
 
 
         // Callback registration
@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             public void onCompleted(JSONObject me, GraphResponse response) {
                                 if (response.getError() != null) {
                                     // handle error
-                                    Snackbar.make(coordinatorLayout, "Something Went Wrong", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(linearLayout, "Something Went Wrong", Snackbar.LENGTH_LONG).show();
                                 } else {
                                     // get email and id of the user
 
@@ -158,7 +158,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -167,6 +166,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        } else {
+            // add fb callback here
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

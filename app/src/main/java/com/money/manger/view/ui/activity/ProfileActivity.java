@@ -58,9 +58,11 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
 
         String social = "";
         if (PreferenceAppHelper.getSocialUser() == 1){
-            social = "google";
+            social = "Google";
+        } else if (PreferenceAppHelper.getSocialUser() == 2){
+            social = "Facebook";
         } else {
-            social = "email";
+            social = "Email";
         }
 
 

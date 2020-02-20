@@ -5,12 +5,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,11 +32,17 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.money.manger.R;
 import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.utils.PreferenceAppHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,15 +51,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private static final int RC_SIGN_IN = 101;
     private GoogleSignInClient mGoogleSignInClient;
-   // private CallbackManager callbackManager;
+    private CallbackManager callbackManager;
+    private static final String EMAIL = "email";
 
     @BindView(R.id.google_sign_in_button)
     SignInButton signInButton;
+
+    @BindView(R.id.fb_login_button)
+    LoginButton fbButton;
+
+    @BindView(R.id.linear_layout)
+    LinearLayout coordinatorLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //fb sdk intitalize before inflate view
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
        // dbhelper = new DbHelper(this);
@@ -56,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         settingUpGoogleSignIn();
+        settingUpFaceBookSignIn();
     }
 
 
@@ -63,6 +89,63 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(LoginActivity.this, MonthlyDateSelectionActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.enter_right_to_left, R.anim.exit_left_to_right);
+    }
+
+    private void settingUpFaceBookSignIn() {
+        callbackManager = CallbackManager.Factory.create();
+        fbButton.setReadPermissions(Arrays.asList(EMAIL));
+
+
+        // Callback registration
+        fbButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject me, GraphResponse response) {
+                                if (response.getError() != null) {
+                                    // handle error
+                                    Snackbar.make(coordinatorLayout, "Something Went Wrong", Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    // get email and id of the user
+
+                                    String email = me.optString("email");
+                                    String id = me.optString("id");
+                                    String firstName = me.optString("first_name");
+                                    String lastName = me.optString("last_name");
+
+                                    String ss = "https://graph.facebook.com/" + id + "/picture?width=512&height=512";
+
+
+                                    handleSocialLogin(2, id, "" + firstName + " " + lastName, email, ss);
+
+
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location,picture"); // Parámetros que pedimos a facebook
+                request.setParameters(parameters);
+                request.executeAsync();
+                LoginManager.getInstance().logOut();
+                // loginSuccess("");
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                Log.e("err", "" + exception.getLocalizedMessage());
+            }
+        });
+
     }
 
 
@@ -75,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);

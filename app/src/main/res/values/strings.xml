@@ -2,4 +2,8 @@
     <string name="app_name">moneyManager</string>
     <string name="rupee">RS.</string>
     <string name="rupeeSymbol">"\u20B9"</string>
+
+    <string name="facebook_app_id">268168524166509</string>
+    <string name="fb_login_protocol_scheme">fb268168524166509</string>
+
 </resources>

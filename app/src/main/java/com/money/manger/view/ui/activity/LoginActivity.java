@@ -145,7 +145,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onError(FacebookException exception) {
                 // App code
                 Log.e("err", "" + exception.getLocalizedMessage());
+
+                if(exception.getLocalizedMessage() == "CONNECTION_FAILURE: CONNECTION_FAILURE"){
+                    Toast.makeText(LoginActivity.this, "No Internet Available", Toast.LENGTH_LONG).show();
+                }
             }
+
         });
 
     }
@@ -234,7 +239,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this,"" + connectionResult, Toast.LENGTH_LONG).show();
     }
 
     private void settingUpGoogleSignIn() {

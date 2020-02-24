@@ -1,4 +1,4 @@
 key alias: mm
 
-Store password: androidkeys
-Key password: androidkeys
+Store password: androidkey
+Key password: androidkey

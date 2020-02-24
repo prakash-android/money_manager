@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -38,6 +39,7 @@ import com.money.manger.view.database.DbHelper;
 import com.money.manger.view.utils.PreferenceAppHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.money.manger.view.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -151,8 +153,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @OnClick(R.id.google_sign_in_button)
     public void googleSigninButton(){
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        if(Utils.isInternetAvailable(this)) {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        } else {
+            Toast.makeText(this, "No Internet Available", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

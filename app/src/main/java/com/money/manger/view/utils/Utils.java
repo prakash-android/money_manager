@@ -1,7 +1,10 @@
 package com.money.manger.view.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 
@@ -101,6 +104,23 @@ public class Utils {
         return fileOut;
     }
 
+
+    // For Checking Internet Availability....
+    public static Boolean isInternetAvailable(Context c) {
+
+        ConnectivityManager cm = (ConnectivityManager) c
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (null != activeNetwork) {
+            if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
+                return true;
+
+            if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
+                return true;
+        }
+        return false;
+    }
 
     public static byte[] getImageBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

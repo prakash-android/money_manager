@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "974299471289-oe03orhc6ighntha0mh6ddto3og69ior.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.money.manger",
+            "certificate_hash": "4f51da250bbf15bb7ee1a5499452a8e448ccf993"
+          }
+        },
+        {
           "client_id": "974299471289-vpqap00m886u2k6qsqf3lmiijg683q56.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

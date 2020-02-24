@@ -147,9 +147,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // App code
                 Log.e("err", "" + exception.getLocalizedMessage());
 
-                if(Utils.isInternetAvailable(LoginActivity.this)){
-                    Toast.makeText(LoginActivity.this, "No Internet Available", Toast.LENGTH_LONG).show();
-                }
             }
 
         });

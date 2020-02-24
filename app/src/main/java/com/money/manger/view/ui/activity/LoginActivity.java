@@ -18,6 +18,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -146,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // App code
                 Log.e("err", "" + exception.getLocalizedMessage());
 
-                if(exception.getLocalizedMessage() == "CONNECTION_FAILURE: CONNECTION_FAILURE"){
+                if(Utils.isInternetAvailable(LoginActivity.this)){
                     Toast.makeText(LoginActivity.this, "No Internet Available", Toast.LENGTH_LONG).show();
                 }
             }

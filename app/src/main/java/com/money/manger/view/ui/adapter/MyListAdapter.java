@@ -72,7 +72,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         }
 
 
-        holder.overflowImageView.setOnClickListener(new View.OnClickListener() {
+        holder.itemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Dialog mDialog = new Dialog(mContext);

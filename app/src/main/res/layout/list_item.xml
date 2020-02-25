@@ -23,6 +23,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="0.5"
+            android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_picture_preview"/>
 
         <LinearLayout

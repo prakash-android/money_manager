@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -89,9 +91,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
                 if(listdata.get(position).getImg() != null) {
                     fullImageView.setImageBitmap(Utils.getImage(listdata.get(position).getImg()));
                 } else {
-                    Bitmap picture_preview = BitmapFactory.decodeResource(mContext.getResources(),
-                            R.drawable.ic_picture_preview);
-                    fullImageView.setImageBitmap(picture_preview);
+                    fullImageView.setImageResource(R.drawable.ic_picture_preview);
                 }
 
                 cancelExitApp.setOnClickListener(new View.OnClickListener() {

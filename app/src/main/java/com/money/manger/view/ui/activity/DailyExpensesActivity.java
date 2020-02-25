@@ -141,7 +141,6 @@ public class DailyExpensesActivity extends AppCompatActivity {
     }
 
 
-
     @OnClick(R.id.add_btn)
     public void addButton() {
         Intent i = new Intent(this, NewExpensesActivity.class);

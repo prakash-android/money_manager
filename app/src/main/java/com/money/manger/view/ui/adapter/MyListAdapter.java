@@ -1,14 +1,20 @@
 package com.money.manger.view.ui.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +72,37 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         }
 
 
+        holder.overflowImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog mDialog = new Dialog(mContext);
+                mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                mDialog.getWindow().setBackgroundDrawable(
+                        new ColorDrawable(Color.TRANSPARENT)
+                );
+                mDialog.setContentView(R.layout.image_view_layout);
+                mDialog.setCancelable(false);
+                TextView cancelExitApp = mDialog.findViewById(R.id.cancel_text);
+                ImageView fullImageView = mDialog.findViewById(R.id.full_image);
+
+                if(listdata.get(position).getImg() != null) {
+                    fullImageView.setImageBitmap(Utils.getImage(listdata.get(position).getImg()));
+                } else {
+                    Bitmap picture_preview = BitmapFactory.decodeResource(mContext.getResources(),
+                            R.drawable.ic_picture_preview);
+                    fullImageView.setImageBitmap(picture_preview);
+                }
+
+                cancelExitApp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDialog.dismiss();
+                    }
+                });
+                mDialog.show();
+            }
+        });
 
         holder.overflowImageView.setOnClickListener(new View.OnClickListener() {
             @Override

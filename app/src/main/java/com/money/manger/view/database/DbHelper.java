@@ -88,7 +88,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * ----------------------------
      * update values to row with id (unique field)
      */
-    public boolean updateCashHistory (Integer id, String name, int amt, String date) {
+    public boolean updateCashHistory (Integer id, String name, int amt, String date, byte[] imageBytes) {
         boolean s;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -96,6 +96,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_NAME, name);
         contentValues.put(COLUMN_AMOUNT, amt);
         contentValues.put(COLUMN_DATE, date);
+        contentValues.put(COLUMN_IMAGE, imageBytes);
 
         //update row
         long success = db.update( MONEY_TABLE , contentValues, COLUMN_ID + " = ? ", new String[] { Integer.toString(id) } );
@@ -357,8 +358,11 @@ public class DbHelper extends SQLiteOpenHelper {
                         COLUMN_AMOUNT, COLUMN_DATE, COLUMN_IMAGE }, COLUMN_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         cursor.moveToFirst();
-       byte[] byteImage2 = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE));
+        byte[] byteImage2 = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE));
+
         cursor.close();
+        db.close();
+        Log.e("mm", "img byte[] " + byteImage2 );
         return byteImage2;
     }
 

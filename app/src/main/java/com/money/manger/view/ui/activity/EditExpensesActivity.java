@@ -34,6 +34,8 @@ import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
+import static com.money.manger.view.utils.Utils.convertCustomFileSize;
+import static com.money.manger.view.utils.Utils.getBitmapAsByteArray;
 import static com.money.manger.view.utils.Utils.getImage;
 
 
@@ -109,7 +111,11 @@ public class EditExpensesActivity extends AppCompatActivity {
     private void setIntentValues() {
         nameEditText.setText(nameString);
         amtEditText.setText(String.valueOf(amt));
-        Glide.with(EditExpensesActivity.this).load(getImage(imgByteArray)).into(itemImageView);
+
+        //only set image if its added before
+        if(imgByteArray != null) {
+            Glide.with(EditExpensesActivity.this).load(getImage(imgByteArray)).into(itemImageView);
+        }
     }
 
 
@@ -156,10 +162,12 @@ public class EditExpensesActivity extends AppCompatActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
-                newItemImage = imageFile;
+                newItemImage =  convertCustomFileSize(imageFile, 1024, imageFile.getName());
                 Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 Glide.with(EditExpensesActivity.this).load(bitmap).into(itemImageView);
+
                 imgPicked = true;
+                imgByteArray = getBitmapAsByteArray(bitmap);
             }
 
         });
@@ -328,7 +336,7 @@ public class EditExpensesActivity extends AppCompatActivity {
 
     public void updateRow(){
         boolean queryResult = false;
-        queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString );
+        queryResult = dbhelper.updateCashHistory( id,""+nameEditText.getText().toString(), Integer.parseInt(amtEditText.getText().toString()), ""+dateString , imgByteArray);
 
         if(queryResult) {
             Toast.makeText(this, "Update success",Toast.LENGTH_LONG).show();
@@ -366,7 +374,7 @@ public class EditExpensesActivity extends AppCompatActivity {
    //check for data changed (instead of comparing byteArray of images, we use bool value)
     public void alertDialog() {
 
-        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(String.valueOf(amt)) || !imgPicked ) {
+        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(String.valueOf(amt)) || imgPicked ) {
             builder = new AlertDialog.Builder(this);
             builder.setTitle("Content Changed");
             builder.setMessage("Do you want to save your edits?")

@@ -345,6 +345,25 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
+
+    /**
+     * get image from db with id
+     * returns byte[]
+     */
+    public byte[] getImageWithId(Integer id) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(MONEY_TABLE, new String[] { COLUMN_ID, COLUMN_ITEM_NAME,
+                        COLUMN_AMOUNT, COLUMN_DATE, COLUMN_IMAGE }, COLUMN_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        cursor.moveToFirst();
+       byte[] byteImage2 = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE));
+        cursor.close();
+        return byteImage2;
+    }
+
+
+
     /**
      * delete particular row with id from table
      * checks result/ row returned > 0

@@ -34,6 +34,8 @@ import butterknife.OnClick;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
+import static com.money.manger.view.utils.Utils.getImage;
+
 
 public class EditExpensesActivity extends AppCompatActivity {
 
@@ -56,6 +58,9 @@ public class EditExpensesActivity extends AppCompatActivity {
     String nameString;
     int amt = 0;
     int id = 0;
+    byte[] imgByteArray;
+
+    boolean imgPicked = false;
 
     DbHelper dbhelper;
     AlertDialog.Builder builder;
@@ -96,12 +101,15 @@ public class EditExpensesActivity extends AppCompatActivity {
         amt = intent.getIntExtra("amt", amt);
         dateString = "" + intent.getStringExtra("date");
 
+        // get imgbytearray from db
+        imgByteArray = dbhelper.getImageWithId(id);
         setIntentValues();
     }
 
     private void setIntentValues() {
         nameEditText.setText(nameString);
         amtEditText.setText(String.valueOf(amt));
+        Glide.with(EditExpensesActivity.this).load(getImage(imgByteArray)).into(itemImageView);
     }
 
 
@@ -151,6 +159,7 @@ public class EditExpensesActivity extends AppCompatActivity {
                 newItemImage = imageFile;
                 Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 Glide.with(EditExpensesActivity.this).load(bitmap).into(itemImageView);
+                imgPicked = true;
             }
 
         });
@@ -354,10 +363,10 @@ public class EditExpensesActivity extends AppCompatActivity {
         alertDialog();
     }
 
-   //check for data changed
+   //check for data changed (instead of comparing byteArray of images, we use bool value)
     public void alertDialog() {
 
-        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(String.valueOf(amt)) ) {
+        if ( !nameEditText.getText().toString().equals(nameString) || !amtEditText.getText().toString().equals(String.valueOf(amt)) || !imgPicked ) {
             builder = new AlertDialog.Builder(this);
             builder.setTitle("Content Changed");
             builder.setMessage("Do you want to save your edits?")

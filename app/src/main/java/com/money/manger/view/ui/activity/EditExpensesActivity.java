@@ -162,8 +162,9 @@ public class EditExpensesActivity extends AppCompatActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
 
+                //convert image on pick
                 newItemImage =  convertCustomFileSize(imageFile, 1024, imageFile.getName());
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                Bitmap bitmap = BitmapFactory.decodeFile(newItemImage.getAbsolutePath());
                 Glide.with(EditExpensesActivity.this).load(bitmap).into(itemImageView);
 
                 imgPicked = true;

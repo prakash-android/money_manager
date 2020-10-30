@@ -41,6 +41,18 @@ import com.money.manger.view.utils.PreferenceAppHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.money.manger.view.utils.Utils;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONObject;
 
@@ -63,6 +75,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @BindView(R.id.fb_login_button)
     LoginButton fbButton;
 
+    @BindView(R.id.twitter_login_button)
+    TwitterLoginButton twitterButton;
+
     @BindView(R.id.linear_layout)
     LinearLayout linearLayout;
 
@@ -70,6 +85,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //twitter sdk
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig("CONSUMER_KEY", "CONSUMER_SECRET"))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
 
         //fb sdk for logging
        // FacebookSdk.sdkInitialize(getApplicationContext());
@@ -84,7 +107,53 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         settingUpGoogleSignIn();
         settingUpFaceBookSignIn();
+        settingUpTwitterSignIn();
     }
+
+    private void settingUpTwitterSignIn() {
+
+
+
+        twitterButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken authToken = session.getAuthToken();
+                String token = authToken.token;
+                String secret = authToken.secret;
+
+
+
+                TwitterAuthClient authClient = new TwitterAuthClient();
+                authClient.requestEmail(session, new Callback<String>() {
+                    @Override
+                    public void success(Result<String> result) {
+                        // Do something with the result, which provides the email address
+                        handleSocialLogin(2, String.valueOf(session.getUserId()), session.getUserName(), "" + result, "");
+
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        // Do something on failure
+                        Log.e("twitter", "" + exception.getMessage());
+                        handleSocialLogin(2, String.valueOf(session.getUserId()), session.getUserName(), "", "");
+
+                    }
+                });
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+                Log.e("twitter", "" + exception.getMessage());
+            }
+        });
+
+
+    }
+
 
 
     private void verifySuccess() {
@@ -180,6 +249,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             callbackManager.onActivityResult(requestCode, resultCode, data);
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+        // Pass the activity result to the login button.
+        twitterButton.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {

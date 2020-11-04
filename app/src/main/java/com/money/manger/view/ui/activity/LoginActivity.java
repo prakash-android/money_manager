@@ -138,7 +138,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     public void failure(TwitterException exception) {
                         // Do something on failure
                         Log.e("twitter", "" + exception.getMessage());
-                        handleSocialLogin(2, String.valueOf(session.getUserId()), session.getUserName(), "", "");
 
                     }
                 });

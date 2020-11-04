@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void success(Result<String> result) {
                         // Do something with the result, which provides the email address
-                        handleSocialLogin(2, String.valueOf(session.getUserId()), session.getUserName(), "" + result, "");
+                        handleSocialLogin(2, String.valueOf(session.getUserId()), session.getUserName(), "" + result.data, "");
 
                     }
 

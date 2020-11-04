@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //twitter sdk
         TwitterConfig config = new TwitterConfig.Builder(this)
                 .logger(new DefaultLogger(Log.DEBUG))
-                .twitterAuthConfig(new TwitterAuthConfig("CONSUMER_KEY", "CONSUMER_SECRET"))
+                .twitterAuthConfig(new TwitterAuthConfig("qSnlDsDp7q8J2QS4ji2oNGLJH", "84yYR3nwBI3KMOO13jDMTuyZCmimovp6lZG9ez0iCJcThRlQSk"))
                 .debug(true)
                 .build();
         Twitter.initialize(config);
